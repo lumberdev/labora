@@ -1,0 +1,40 @@
+---
+import clouds from '../assets/clouds.png'
+import cityscape from '../assets/cityscape-full-desktop.png'
+import { Image } from 'astro:assets'
+---
+
+<section id='about' class='grid gap-20'>
+  <div class='flex xl:flex-row flex-col gap-3 xl:gap-0'>
+    <div class='max-w-[850px]'>
+      <h1
+        class='text-5xl md:text-7xl lg:text-9xl font-bold uppercase tracking-wide leading-tight'
+      >
+        Empowering People
+      </h1>
+    </div>
+    <div class='lg:self-end max-w-[550px] pb-[22px] xl:-ml-20'>
+      <p class='text-sm md:text-lg lg:text-2xl !leading-normal'>
+        From partnering with entrepreneurs to developing lasting assets, our
+        mission is to empower others to achieve long-term success.
+      </p>
+    </div>
+  </div>
+  <div class='-mx-5 lg:-mx-12 relative h-[233px]'>
+    <Image class='absolute -top-10' src={clouds} alt='clouds' />
+    <Image class='absolute inset-0' src={cityscape} alt='cityscape' />
+  </div>
+  <div
+    class='max-w-[900px] text-center text-3xl justify-self-center text-tan space-y-10 font-normal leading-normal'
+  >
+    <p>
+      Labora oversees the diverse business and philanthropic interests of the
+      Mackie Family. We are focused on growth-oriented, entrepreneurial
+      opportunities that create long-term value for all stakeholders.
+    </p>
+    <p>
+      Our portfolio of companies is unified under a shared vision: to make a
+      lasting impact on our customers, clients, and communities.
+    </p>
+  </div>
+</section>
