@@ -19,6 +19,16 @@ export default {
       letterSpacing: {
         wide: '0.03em',
       },
+      fontSize: {
+        '2xl': '1.375rem',
+        '3xl': '1.75rem',
+        '5xl': '2.75rem',
+        '6xl': '3.625rem',
+        '9xl': '7.5rem',
+      },
+      lineHeight: {
+        tight: '1.2',
+      },
     },
   },
   plugins: [],
