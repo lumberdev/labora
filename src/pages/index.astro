@@ -15,3 +15,29 @@ import Nav from '../components/nav.astro'
     <Nav />
   </body>
 </html>
+
+<style is:global>
+  main > section:first-of-type,
+  header > nav {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  main > section:not(:first-of-type) {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  @media (min-width: 1024px) {
+    main > section:first-of-type,
+    header > nav {
+      padding-left: 50px;
+      padding-right: 50px;
+    }
+
+    main > section:not(:first-of-type) {
+      padding-left: 100px;
+      padding-right: 100px;
+    }
+  }
+</style>
