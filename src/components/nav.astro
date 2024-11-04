@@ -1,0 +1,21 @@
+---
+const anchors = ['about', 'companies', 'investments', 'impact']
+import Logo from '/labora-logo.svg?raw'
+console.log(Logo)
+---
+
+<nav class='flex justify-between items-center gap-10 py-8'>
+  <div>
+    <Fragment set:html={Logo} />
+  </div>
+
+  <div class='flex gap-10 uppercase'>
+    {
+      anchors.map((anchor) => (
+        <a class='font-sans tracking-wide' href={`#${anchor}`}>
+          {anchor}
+        </a>
+      ))
+    }
+  </div>
+</nav>

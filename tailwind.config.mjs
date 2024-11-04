@@ -16,6 +16,9 @@ export default {
       fontFamily: {
         sans: ['DM Sans', ...defaultTheme.fontFamily.sans],
       },
+      letterSpacing: {
+        wide: '0.03em',
+      },
     },
   },
   plugins: [],
