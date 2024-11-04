@@ -5,10 +5,11 @@ export default {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
   theme: {
     colors: {
-      black: '#232323',
+      black: '#000',
       white: '#FFFFFF',
-      'dark-grey': '#474747',
-      grey: '#8483A0',
+      'grey-dark': '#232323',
+      grey: '#474747',
+      'grey-light': '#8483A0',
       tan: '#D6C099',
       'tan-light': '#EAE8D0',
     },

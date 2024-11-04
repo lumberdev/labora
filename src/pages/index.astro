@@ -1,6 +1,11 @@
 ---
 import '@fontsource-variable/dm-sans'
 import Nav from '../components/nav.astro'
+
+import About from '../components/about.astro'
+import Footer from '../components/footer.astro'
+import Companies from '../components/companies.astro'
+import Investments from '../components/investments.astro'
 ---
 
 <html lang='en'>
@@ -11,8 +16,14 @@ import Nav from '../components/nav.astro'
     <meta name='generator' content={Astro.generator} />
     <title>Astro</title>
   </head>
-  <body class='bg-black text-white px-12'>
-    <Nav />
+  <body class='bg-grey-dark text-white'>
+    <main class='mx-auto max-w-[1440px]'>
+      <Nav />
+      <About />
+      <Companies />
+      <Investments />
+      <Footer />
+    </main>
   </body>
 </html>
 
