@@ -7,16 +7,18 @@ import dallas from '../assets/footer-dallas.png'
 import london from '../assets/footer-london.png'
 ---
 
-<footer class='py-24 flex items-center justify-between'>
-  <div class='flex flex-col gap-4 [&>svg]:h-12'>
+<footer
+  class='grid place-items-center px-10 py-24 lg:grid-flow-col lg:px-[100px]'
+>
+  <div class='hidden flex-col gap-4 lg:row-start-1 lg:flex [&>svg]:h-12'>
     <Fragment set:html={Logo} />
-    <p class='text-xs text-dark-grey'>© 2024 Labora. All rights reserved.</p>
+    <p class='text-xs text-grey'>© 2024 Labora. All rights reserved.</p>
   </div>
-  <div class='flex gap-[100px]'>
-    <div class='flex gap-5 mt-[9.53px]'>
+  <div class='flex flex-col gap-5 pb-20 lg:flex-row lg:gap-[100px] lg:pb-0'>
+    <div class='mt-[9.53px] flex gap-5'>
       <Image src={dallas} alt='dallas' class='h-[120px] w-[38px]' />
       <div class='mt-5'>
-        <p class='uppercase tracking-wide pb-[10px] leading-tight'>Dallas</p>
+        <p class='pb-[10px] uppercase leading-tight tracking-wide'>Dallas</p>
         <p>400 S. Record St.</p>
         <p>Suite 1600</p>
         <p>Dallas, TX 75202 USA</p>
@@ -25,31 +27,43 @@ import london from '../assets/footer-london.png'
     <div class='flex gap-5'>
       <Image src={london} alt='london' class='h-[129px] w-[25px]' />
       <div class='mt-5'>
-        <p class='uppercase tracking-wide pb-[10px] leading-tight'>London</p>
+        <p class='pb-[10px] uppercase leading-tight tracking-wide'>London</p>
         <p>11 Dover St.</p>
         <p>London W1S 4JL</p>
         <p>United Kingdom</p>
       </div>
     </div>
   </div>
-  <div class='flex gap-5'>
-    <a
-      href='https://www.linkedin.com/company/labora-inc'
-      target='_blank'
-      rel='noopener noreferrer'
-    >
-      <div
-        class='rounded-full border border-white h-12 w-12 flex items-center justify-center'
+  <div
+    class='flex flex-col items-center gap-5 lg:place-self-end lg:[&>svg]:hidden'
+  >
+    <Fragment set:html={Logo} />
+    <div class='flex gap-5'>
+      <a
+        href='https://www.linkedin.com/company/labora-inc'
+        target='_blank'
+        rel='noopener noreferrer'
       >
-        <Fragment set:html={Mail} />
-      </div>
-    </a>
-    <a href='mailto:info@labora.com' target='_blank' rel='noopener noreferrer'>
-      <div
-        class='rounded-full border border-white h-12 w-12 flex items-center justify-center'
+        <div
+          class='flex h-12 w-12 items-center justify-center rounded-full border border-white'
+        >
+          <Fragment set:html={Mail} />
+        </div>
+      </a>
+      <a
+        href='mailto:info@labora.com'
+        target='_blank'
+        rel='noopener noreferrer'
       >
-        <Fragment set:html={LinkedIn} />
-      </div>
-    </a>
+        <div
+          class='flex h-12 w-12 items-center justify-center rounded-full border border-white'
+        >
+          <Fragment set:html={LinkedIn} />
+        </div>
+      </a>
+    </div>
+    <p class='text-xs text-grey lg:hidden'>
+      © 2024 Labora. All rights reserved.
+    </p>
   </div>
 </footer>
