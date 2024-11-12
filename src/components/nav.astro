@@ -1,0 +1,29 @@
+---
+const anchors = ['about', 'companies', 'investments', 'impact']
+import Logo from '/labora-logo.svg?raw'
+import Hamburger from '/hamburger.svg?raw'
+import MobileNav from './MobileNav.tsx'
+---
+
+<header>
+  <nav class='flex justify-between items-center gap-10 py-8'>
+    <div>
+      <Fragment set:html={Logo} />
+    </div>
+
+    <div class='md:flex hidden gap-10 uppercase'>
+      {
+        anchors.map((anchor) => (
+          <a class='font-sans tracking-wide' href={`#${anchor}`}>
+            {anchor}
+          </a>
+        ))
+      }
+    </div>
+    <div class='md:hidden'>
+      <MobileNav anchors={anchors}>
+        <Fragment set:html={Hamburger} />
+      </MobileNav>
+    </div>
+  </nav>
+</header>

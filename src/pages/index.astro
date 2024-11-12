@@ -1,16 +1,56 @@
 ---
+import '@fontsource-variable/dm-sans'
+import Nav from '../components/nav.astro'
 
+import About from '../components/about.astro'
+import Footer from '../components/footer.astro'
+import Companies from '../components/companies.astro'
+import Investments from '../components/investments.astro'
+import Impact from '../components/impact.astro'
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8' />
+    <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+    <meta name='viewport' content='width=device-width' />
+    <meta name='generator' content={Astro.generator} />
+    <title>Astro</title>
+  </head>
+  <body class='bg-grey-dark text-white'>
+    <main class='mx-auto max-w-[1440px]'>
+      <Nav />
+      <About />
+      <Companies />
+      <Investments />
+      <Impact />
+      <Footer />
+    </main>
+  </body>
 </html>
+
+<style is:global>
+  main > section:first-of-type,
+  header > nav {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  main > section:not(:first-of-type) {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  @media (min-width: 1024px) {
+    main > section:first-of-type,
+    header > nav {
+      padding-left: 50px;
+      padding-right: 50px;
+    }
+
+    main > section:not(:first-of-type) {
+      padding-left: 100px;
+      padding-right: 100px;
+    }
+  }
+</style>
