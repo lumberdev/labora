@@ -12,7 +12,7 @@ const Sphere = ({ radius }: Props) => {
         attach="material"
         opacity={1}
         shininess={20}
-        color="#006C87"
+        color="#696969"
         transparent
       />
     </mesh>

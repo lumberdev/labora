@@ -1,9 +1,13 @@
 ---
-import { Image } from 'astro:assets'
-import placeholder from '../assets/companies-placeholder.png'
+import { Globe } from './globe/Globe'
+const selectedLocation = {
+  name: 'London',
+  lat: 51.5074,
+  lon: -0.1278,
+}
 ---
 
 <section id='companies' class='my-[100px]'>
   <h2 class='text-6xl uppercase tracking-wide'>Operating Companies</h2>
-  <Image src={placeholder} alt='placeholder' />
+  <Globe selectedLocation={selectedLocation} client:only='react' />
 </section>

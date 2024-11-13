@@ -39,7 +39,6 @@ export function Globe({ radius = 8, dotsOffset = 0, selectedLocation }: Props) {
       <Sphere radius={radius} />
       <Suspense fallback={null}>
         <Dots radius={radius + dotsOffset / 10} />
-        {/* <Points /> */}
       </Suspense>
       <mesh ref={markerRef}>
         <sphereGeometry args={[0.1, 32, 32]} />
