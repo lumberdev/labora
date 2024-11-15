@@ -6,6 +6,8 @@ import * as THREE from 'three'
 import Sphere from './Sphere'
 import { Dots } from './Dots'
 import type { Location } from '@/types'
+import Marker from './Marker'
+import cefLogo from '/cef.png?url'
 
 type Props = {
   radius?: number
@@ -17,21 +19,33 @@ export function Globe({ radius = 8, dotsOffset = 0, selectedLocation }: Props) {
   const markerRef = useRef<THREE.Mesh>(null)
 
   useEffect(() => {
-    if (selectedLocation && markerRef.current) {
-      const { lat, lon } = selectedLocation
-      const phi = (90 - lat) * (Math.PI / 180)
-      const theta = (lon + 180) * (Math.PI / 180)
+    if (markerRef.current && selectedLocation) {
+      console.log('markerRef.current', markerRef.current)
+      // Convert latitude and longitude to 3D coordinates
+      const phi = (90 - selectedLocation.lat) * (Math.PI / 180)
+      const theta = (selectedLocation.lon + 180) * (Math.PI / 180)
 
+      // Calculate position on the sphere's surface
       const x = -(radius + 0.1) * Math.sin(phi) * Math.cos(theta)
       const y = (radius + 0.1) * Math.cos(phi)
       const z = (radius + 0.1) * Math.sin(phi) * Math.sin(theta)
 
       markerRef.current.position.set(x, y, z)
-      markerRef.current.visible = true
-    } else if (markerRef.current) {
-      markerRef.current.visible = false
+
+      // Calculate rotation to make the marker face outward from the globe's center
+      const position = new THREE.Vector3(x, y, z)
+      const up = new THREE.Vector3(0, 1, 0)
+      const matrix = new THREE.Matrix4()
+
+      matrix.lookAt(
+        position, // Look from the marker's position
+        position.clone().add(position.clone().normalize()), // Look outward
+        up, // Up direction
+      )
+
+      markerRef.current.quaternion.setFromRotationMatrix(matrix)
     }
-  }, [selectedLocation, radius])
+  }, [radius])
 
   return (
     <Canvas camera={{ position: [1, 4, 15], near: 1, far: 50 }}>
@@ -40,10 +54,14 @@ export function Globe({ radius = 8, dotsOffset = 0, selectedLocation }: Props) {
       <Suspense fallback={null}>
         <Dots radius={radius + dotsOffset / 10} />
       </Suspense>
-      <mesh ref={markerRef}>
-        <sphereGeometry args={[0.1, 32, 32]} />
-        <meshBasicMaterial color={0xff0000} />
-      </mesh>
+      <Marker
+        ref={markerRef}
+        country="United Kingdom"
+        logo={cefLogo}
+        blob={
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vitae velit nec leo posuere tincidunt.'
+        }
+      />
       <OrbitControls
         minDistance={5}
         minPolarAngle={Math.PI * 0.35}
