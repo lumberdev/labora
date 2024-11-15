@@ -14,11 +14,11 @@ export default {
       'tan-light': '#EAE8D0',
     },
     extend: {
+      borderRadius: {
+        DEFAULT: '0.625rem',
+      },
       fontFamily: {
         sans: ['DM Sans', ...defaultTheme.fontFamily.sans],
-      },
-      letterSpacing: {
-        wide: '0.03em',
       },
       fontSize: {
         '2xl': '1.375rem',
@@ -27,6 +27,10 @@ export default {
         '6xl': '3.625rem',
         '9xl': '7.5rem',
       },
+      letterSpacing: {
+        wide: '0.03em',
+      },
+
       lineHeight: {
         tight: '1.2',
       },
