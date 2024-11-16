@@ -9,7 +9,13 @@ import {
   getDistance,
 } from '@/lib/utils'
 
-export function Dots({ count = 200000, radius = 6.2, dotRadius = 2 }) {
+type Props = {
+  count?: number
+  radius?: number
+  dotRadius?: number
+}
+
+export function Dots({ count = 200000, radius = 6.2, dotRadius = 2 }: Props) {
   const ref = useRef<THREE.InstancedMesh>(null)
 
   const mapElement = useLoader(THREE.ImageLoader, '/world-map.png')
