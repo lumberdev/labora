@@ -5,14 +5,14 @@ import { OrbitControls } from '@react-three/drei'
 import * as THREE from 'three'
 import Sphere from './Sphere'
 import { Dots } from './Dots'
-import type { Location } from '@/types'
 import Marker from './Marker'
 import cefLogo from '/cef.png?url'
+import { coordinates, type CountryKey } from '@/lib/data'
 
 type Props = {
   radius?: number
   dotsOffset?: number
-  selectedLocation: Location | null
+  selectedLocation: CountryKey
 }
 
 export function Globe({ radius = 8, dotsOffset = 0, selectedLocation }: Props) {
@@ -22,8 +22,8 @@ export function Globe({ radius = 8, dotsOffset = 0, selectedLocation }: Props) {
     if (markerRef.current && selectedLocation) {
       console.log('markerRef.current', markerRef.current)
       // Convert latitude and longitude to 3D coordinates
-      const phi = (90 - selectedLocation.lat) * (Math.PI / 180)
-      const theta = (selectedLocation.lon + 180) * (Math.PI / 180)
+      const phi = (90 - coordinates[selectedLocation].lat) * (Math.PI / 180)
+      const theta = (coordinates[selectedLocation].lon + 180) * (Math.PI / 180)
 
       // Calculate position on the sphere's surface
       const x = -(radius + 0.1) * Math.sin(phi) * Math.cos(theta)
@@ -45,7 +45,7 @@ export function Globe({ radius = 8, dotsOffset = 0, selectedLocation }: Props) {
 
       markerRef.current.quaternion.setFromRotationMatrix(matrix)
     }
-  }, [radius])
+  }, [radius, selectedLocation])
 
   return (
     <Canvas camera={{ position: [1, 4, 15], near: 1, far: 50 }}>
@@ -56,7 +56,7 @@ export function Globe({ radius = 8, dotsOffset = 0, selectedLocation }: Props) {
       </Suspense>
       <Marker
         ref={markerRef}
-        country="United Kingdom"
+        country={selectedLocation}
         logo={cefLogo}
         blob={
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vitae velit nec leo posuere tincidunt.'
