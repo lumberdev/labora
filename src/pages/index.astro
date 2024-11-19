@@ -30,6 +30,13 @@ import Impact from '../components/impact.astro'
 </html>
 
 <style is:global>
+  html {
+    scroll-behavior: smooth;
+  }
+
+  section {
+    scroll-margin-top: 6.125rem; /* Adjust this value to match your nav height */
+  }
   main > section:first-of-type,
   header > nav {
     padding-left: 1.25rem;
@@ -41,7 +48,7 @@ import Impact from '../components/impact.astro'
     padding-right: 40px;
   }
 
-  @media (min-width: 1024px) {
+  @media (min-width: 768px) {
     main > section:first-of-type,
     header > nav {
       padding-left: 50px;
