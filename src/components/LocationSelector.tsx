@@ -3,8 +3,8 @@ import { Globe } from './globe/Globe'
 import { locations, type CountryKey } from '@/lib/data'
 
 const LocationSelector = () => {
-  const [selectedLocation, setSelectedLocation] = useState<CountryKey>(
-    locations[0].companies[0].countries[0],
+  const [selectedLocation, setSelectedLocation] = useState<CountryKey | null>(
+    null,
   )
 
   return (
