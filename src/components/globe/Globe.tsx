@@ -2,7 +2,9 @@
 import React, { Suspense, useEffect, useRef, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
+import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import * as THREE from 'three'
+import { useSpring, animated } from '@react-spring/three'
 import Sphere from './Sphere'
 import { Dots } from './Dots'
 import Marker from './Marker'
@@ -15,13 +17,37 @@ type Props = {
   selectedLocation: CountryKey | null
 }
 
+type SpringValues = {
+  cameraPosition: [number, number, number]
+  target: [number, number, number]
+}
+
 export function Globe({ radius = 8, dotsOffset = 0, selectedLocation }: Props) {
   const markerRef = useRef<THREE.Mesh>(null)
+  const controlsRef = useRef<OrbitControlsImpl>(null)
   const [markerMounted, setMarkerMounted] = useState(false)
+
+  const [{ cameraPosition }, api] = useSpring<SpringValues>(() => ({
+    cameraPosition: [1, 4, 15],
+    target: [0, 0, 0],
+    onChange: ({ value }: { value: SpringValues }) => {
+      if (controlsRef.current) {
+        controlsRef.current.object.position.set(...value.cameraPosition)
+        controlsRef.current.target.set(...value.target)
+        controlsRef.current.update()
+      }
+    },
+  }))
 
   // Position the marker whenever it's mounted or the selection changes
   useEffect(() => {
-    if (!markerRef.current || !selectedLocation || !markerMounted) return
+    if (
+      !markerRef.current ||
+      !selectedLocation ||
+      !markerMounted ||
+      !controlsRef.current
+    )
+      return
 
     // Convert latitude and longitude to 3D coordinates
     const phi = (90 - coordinates[selectedLocation].lat) * (Math.PI / 180)
@@ -46,7 +72,31 @@ export function Globe({ radius = 8, dotsOffset = 0, selectedLocation }: Props) {
     )
 
     markerRef.current.quaternion.setFromRotationMatrix(matrix)
-  }, [radius, selectedLocation, markerMounted])
+
+    // Calculate camera position to view the selected location
+    const cameraDistance = 15
+    const newCameraPosition = position
+      .clone()
+      .normalize()
+      .multiplyScalar(cameraDistance)
+    newCameraPosition.y += 4
+
+    // Animate to new position
+    api.start({
+      to: {
+        cameraPosition: [
+          newCameraPosition.x,
+          newCameraPosition.y,
+          newCameraPosition.z,
+        ],
+        target: [position.x * 0.9, position.y * 0.9, position.z * 0.9],
+      },
+      config: {
+        tension: 120,
+        friction: 14,
+      },
+    })
+  }, [radius, selectedLocation, markerMounted, api])
 
   // Reset markerMounted when selection changes
   useEffect(() => {
@@ -54,7 +104,13 @@ export function Globe({ radius = 8, dotsOffset = 0, selectedLocation }: Props) {
   }, [selectedLocation])
 
   return (
-    <Canvas camera={{ position: [1, 4, 15], near: 1, far: 50 }}>
+    <Canvas
+      camera={{
+        position: cameraPosition.get() as [number, number, number],
+        near: 1,
+        far: 50,
+      }}
+    >
       <ambientLight />
       <Sphere radius={radius} />
       <Suspense fallback={null}>
@@ -72,7 +128,9 @@ export function Globe({ radius = 8, dotsOffset = 0, selectedLocation }: Props) {
         />
       )}
       <OrbitControls
+        ref={controlsRef}
         minDistance={5}
+        maxDistance={20}
         minPolarAngle={Math.PI * 0.35}
         maxPolarAngle={Math.PI * 0.55}
         enableZoom={false}
