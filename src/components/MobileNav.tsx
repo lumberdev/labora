@@ -13,7 +13,9 @@ const MobileNav = ({ anchors, children }: Props) => {
       <button onClick={() => setIsOpen(!isOpen)}>{children}</button>
       <div className={`${isOpen ? 'block' : 'hidden'}`}>
         {anchors.map((anchor) => (
-          <a href={`#${anchor}`}>{anchor}</a>
+          <a key={anchor} href={`#${anchor}`}>
+            {anchor}
+          </a>
         ))}
       </div>
     </div>
