@@ -4,7 +4,7 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import * as THREE from 'three'
-import { useSpring, animated } from '@react-spring/three'
+import { useSpring } from '@react-spring/three'
 import Sphere from './Sphere'
 import { Dots } from './Dots'
 import Marker from './Marker'
@@ -94,6 +94,7 @@ export function Globe({ radius = 8, dotsOffset = 0, selectedLocation }: Props) {
       config: {
         tension: 120,
         friction: 14,
+        duration: 1000,
       },
     })
   }, [radius, selectedLocation, markerMounted, api])
