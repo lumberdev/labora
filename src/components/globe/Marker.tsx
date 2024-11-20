@@ -42,8 +42,8 @@ const Marker = forwardRef<THREE.Mesh, Props>(
           <lineBasicMaterial color="#D6C099" />
         </line>
 
-        <Html position={[0, 2, 0]} center>
-          <div className="relative grid h-[100px] w-[250px] grid-cols-5">
+        <Html position={[0, 2, 0]} center zIndexRange={[0, 49]}>
+          <div className="grid h-[100px] w-[250px] grid-cols-5">
             <div className="col-span-2 flex items-center justify-center rounded-l bg-white px-6">
               <img src={logo} alt={country} />
             </div>
