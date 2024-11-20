@@ -106,7 +106,7 @@ export function Globe({ radius = 8, dotsOffset = 0, selectedLocation }: Props) {
 
   return (
     <Canvas
-      className="min-h-[400px]"
+      className="order-1 min-h-[400px]"
       camera={{
         position: cameraPosition.get() as [number, number, number],
         near: 1,
