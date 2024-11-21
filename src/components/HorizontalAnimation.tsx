@@ -14,7 +14,7 @@ type Props = {
 const HorizontalAnimation = ({
   to,
   from,
-  duration = 30000,
+  duration = 60000,
   precision = 0.0001,
   loop = true,
   reset = true,
