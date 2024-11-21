@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Globe } from './globe/Globe'
 import { locations, type CountryKey } from '@/lib/data'
 
