@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Globe } from './globe/Globe'
 import { locations, type CountryKey } from '@/lib/data'
 
@@ -8,8 +8,8 @@ const LocationSelector = () => {
   )
 
   return (
-    <div className="grid min-h-[400px] lg:min-h-[610px] lg:grid-cols-2">
-      <div className="h-full w-full overflow-auto p-6">
+    <div className="grid lg:min-h-[610px] lg:grid-cols-2">
+      <div className="order-2 h-full w-full overflow-auto p-6 md:order-1">
         <div className="space-y-6">
           {locations.map((location) => (
             <div key={location.label} className="space-y-4">

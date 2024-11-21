@@ -1,5 +1,4 @@
-'use client'
-import React, { Suspense, useEffect, useRef, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
@@ -106,6 +105,7 @@ export function Globe({ radius = 8, dotsOffset = 0, selectedLocation }: Props) {
 
   return (
     <Canvas
+      className="order-1 min-h-[400px]"
       camera={{
         position: cameraPosition.get() as [number, number, number],
         near: 1,
