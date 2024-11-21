@@ -1,5 +1,9 @@
 ---
-import CityscapeScroll from './CityscapeScroll'
+import { Image } from 'astro:assets'
+import clouds from '../assets/clouds.png'
+import cityscapeDesktop from '../assets/cityscape-full-desktop.png'
+import cityscapeMobile from '../assets/cityscape-full-mobile.png'
+import HorizontalAnimation from './HorizontalAnimation'
 ---
 
 <section id='about' class='mb-[100px] grid gap-20'>
@@ -19,7 +23,26 @@ import CityscapeScroll from './CityscapeScroll'
     </div>
   </div>
   <div class='-mx-5 lg:-mx-12'>
-    <CityscapeScroll client:load />
+    <div class='relative h-[250px] w-full overflow-hidden md:h-[462px]'>
+      <div class='absolute top-0 h-[150px] md:h-[232px]'>
+        <HorizontalAnimation to={0} from={-50} client:load>
+          <Image src={clouds} alt='Clouds' width={2048} />
+          <Image src={clouds} alt='Clouds' width={2048} />
+        </HorizontalAnimation>
+      </div>
+      <div class='absolute bottom-0 hidden h-[434px] md:block'>
+        <HorizontalAnimation to={-50} from={0} client:load>
+          <Image src={cityscapeDesktop} alt='Cityscape' width={2271} />
+          <Image src={cityscapeDesktop} alt='Cityscape' width={2271} />
+        </HorizontalAnimation>
+      </div>
+      <div class='absolute bottom-0 block h-[250px] md:hidden'>
+        <HorizontalAnimation to={-50} from={0} client:load>
+          <Image src={cityscapeMobile} alt='Cityscape' width={1269.5} />
+          <Image src={cityscapeMobile} alt='Cityscape' width={1269.5} />
+        </HorizontalAnimation>
+      </div>
+    </div>
   </div>
   <div
     class='max-w-[900px] space-y-10 justify-self-center text-center text-xl font-normal leading-normal text-tan md:text-3xl'
