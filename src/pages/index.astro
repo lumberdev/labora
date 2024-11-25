@@ -17,7 +17,7 @@ import Impact from '../components/impact.astro'
     <title>Labora</title>
   </head>
   <body class='bg-grey-dark text-white'>
-    <main class='mx-auto max-w-[1440px]'>
+    <main>
       <Nav />
       <About />
       <Companies />
@@ -36,7 +36,7 @@ import Impact from '../components/impact.astro'
   section {
     scroll-margin-top: 6.125rem; /* Adjust this value to match your nav height */
   }
-  main > section:first-of-type,
+
   header > nav {
     padding-left: 1.25rem;
     padding-right: 1.25rem;
@@ -48,13 +48,15 @@ import Impact from '../components/impact.astro'
   }
 
   @media (min-width: 768px) {
-    main > section:first-of-type,
     header > nav {
       padding-left: 50px;
       padding-right: 50px;
     }
 
     main > section:not(:first-of-type) {
+      max-width: 1440px;
+      margin-left: auto;
+      margin-right: auto;
       padding-left: 100px;
       padding-right: 100px;
     }
