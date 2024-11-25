@@ -1,48 +1,54 @@
 import { animated, useSpring } from '@react-spring/web'
-import React from 'react'
+import React, { useState } from 'react'
 
 type Props = {
   to: number
   from: number
   duration?: number
   precision?: number
-  loop?: boolean
-  reset?: boolean
   children: React.ReactNode
 }
 
 const HorizontalAnimation = ({
   to,
   from,
-  duration = 60000,
+  duration = 120000,
   precision = 0.0001,
-  loop = true,
-  reset = true,
   children,
 }: Props) => {
-  const [styles] = useSpring(
-    {
+  // Create two instances of content for seamless loop
+  const [items] = useState([0, 1])
+
+  const [springs] = useSpring(
+    () => ({
       from: { x: from },
-      to: async (next) => {
-        await next({ x: to })
-        await next({ x: from, immediate: true })
-      },
+      to: { x: to },
       config: {
         duration,
         precision,
       },
-      loop,
-      reset,
-    },
+      loop: true,
+      reset: false,
+    }),
     [],
   )
+
   return (
-    <animated.div
-      className="flex h-full w-max"
-      style={{ transform: styles.x.to((x) => `translateX(${x}%)`) }}
-    >
-      {children}
-    </animated.div>
+    <div className="relative w-full overflow-hidden">
+      <animated.div
+        className="flex"
+        style={{
+          transform: springs.x.to((x) => `translateX(${x}%)`),
+        }}
+      >
+        {/* Duplicate content for seamless loop */}
+        {items.map((i) => (
+          <div key={i} className="flex h-full w-max">
+            {children}
+          </div>
+        ))}
+      </animated.div>
+    </div>
   )
 }
 
