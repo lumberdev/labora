@@ -28,7 +28,7 @@ type SpringValues = {
 }
 
 export function Globe({
-  radius = 8,
+  radius = 10,
   dotsOffset = 0,
   selectedLocations,
   autoRotate = false,

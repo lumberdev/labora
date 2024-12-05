@@ -59,7 +59,7 @@ const LocationSelector = () => {
   }, [])
 
   return (
-    <div className="grid lg:min-h-[610px] lg:grid-cols-[min-content_1fr]">
+    <div className="grid lg:min-h-[800px] lg:grid-cols-[min-content_1fr]">
       <div className="order-2 h-full w-full overflow-auto p-6 md:order-1">
         <div className="space-y-6">
           <div className="space-y-4">
@@ -70,8 +70,7 @@ const LocationSelector = () => {
                   key={country.id}
                   className={cn(
                     'transition-colors duration-300',
-                    index === currentCountryIndex &&
-                      'font-bold text-tan-light',
+                    index === currentCountryIndex && 'font-bold text-tan-light',
                   )}
                 >
                   {country.name}
