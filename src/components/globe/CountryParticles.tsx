@@ -22,7 +22,7 @@ const CountryParticles = ({ radius, countryId }: Props) => {
     return new THREE.ShaderMaterial({
       uniforms: {
         time: { value: 0 },
-        color: { value: new THREE.Color('#ffab40') },
+        color: { value: new THREE.Color('#D6C099') },
       },
       vertexShader: `
         uniform float time;
