@@ -3,7 +3,7 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import * as THREE from 'three'
-import { useSpring } from '@react-spring/three'
+import { useSpring, config as springConfig } from '@react-spring/three'
 import Sphere from './Sphere'
 import { Dots } from './Dots'
 
@@ -15,10 +15,11 @@ type Props = {
   dotsOffset?: number
   selectedLocations: {
     name: CountryKey
-    id: number
+    id: string
   }[]
   autoRotate?: boolean
   onAnimationComplete?: () => void
+  onAnimationStep?: (index: number) => void
 }
 
 type SpringValues = {
@@ -32,10 +33,12 @@ export function Globe({
   selectedLocations,
   autoRotate = false,
   onAnimationComplete,
+  onAnimationStep,
 }: Props) {
   const controlsRef = useRef<OrbitControlsImpl>(null)
   const [currentLocationIndex, setCurrentLocationIndex] = useState(0)
   const animationTimeoutRef = useRef<NodeJS.Timeout>()
+  const isAnimatingRef = useRef(false)
 
   const [{ cameraPosition }, api] = useSpring<SpringValues>(() => ({
     cameraPosition: [1, 4, 15],
@@ -53,14 +56,26 @@ export function Globe({
   useEffect(() => {
     if (!autoRotate || !selectedLocations?.length) return
 
-    const rotateToNextLocation = () => {
+    const rotateToNextLocation = async () => {
+      if (isAnimatingRef.current) {
+        // If still animating, try again in 500ms
+        animationTimeoutRef.current = setTimeout(rotateToNextLocation, 500)
+        return
+      }
+
       if (currentLocationIndex === selectedLocations.length - 1) {
-        // We've shown all locations, notify parent
         onAnimationComplete?.()
       } else {
-        setCurrentLocationIndex((prev) => (prev + 1) % selectedLocations.length)
+        setCurrentLocationIndex((prev) => {
+          const next = (prev + 1) % selectedLocations.length
+          onAnimationStep?.(next)
+          return next
+        })
       }
     }
+
+    // Initial step notification
+    onAnimationStep?.(currentLocationIndex)
 
     // Clear any existing timeout
     if (animationTimeoutRef.current) {
@@ -68,14 +83,20 @@ export function Globe({
     }
 
     // Set new timeout for next location
-    animationTimeoutRef.current = setTimeout(rotateToNextLocation, 2000)
+    animationTimeoutRef.current = setTimeout(rotateToNextLocation, 2500)
 
     return () => {
       if (animationTimeoutRef.current) {
         clearTimeout(animationTimeoutRef.current)
       }
     }
-  }, [autoRotate, selectedLocations, currentLocationIndex, onAnimationComplete])
+  }, [
+    autoRotate,
+    selectedLocations,
+    currentLocationIndex,
+    onAnimationComplete,
+    onAnimationStep,
+  ])
 
   // Modify the camera position effect to use currentLocationIndex
   useEffect(() => {
@@ -84,7 +105,7 @@ export function Globe({
     const currentLocation = selectedLocations[currentLocationIndex]
 
     // Function to get 3D coordinates for a country ID
-    const getCountryCoords = (countryId: number) => {
+    const getCountryCoords = (countryId: string) => {
       const location = selectedLocations.find((loc) => loc.id === countryId)
       if (!location) return null
 
@@ -114,70 +135,79 @@ export function Globe({
       return [position.x * 0.9, position.y * 0.9, position.z * 0.9]
     }
 
-    // Function to animate between two points
-    const animateBetweenPoints = async (
-      next: (props: SpringValues) => Promise<void>,
-      fromPosition: THREE.Vector3,
-      toPosition: THREE.Vector3,
-      duration: number = 1000,
-    ) => {
-      // Create midpoint for curved path
-      const midPoint = new THREE.Vector3()
-        .addVectors(
-          new THREE.Vector3(...getCameraPosition(fromPosition, 15)),
-          new THREE.Vector3(...getCameraPosition(toPosition, 15)),
-        )
-        .normalize()
-        .multiplyScalar(22.5) // 1.5x normal camera distance
-        .add(new THREE.Vector3(0, 4, 0))
-
-      // First half of the animation
-      await next({
-        cameraPosition: [midPoint.x, midPoint.y, midPoint.z],
-        target: [
-          (fromPosition.x + toPosition.x) * 0.5,
-          (fromPosition.y + toPosition.y) * 0.5,
-          (fromPosition.z + toPosition.z) * 0.5,
-        ],
-      })
-
-      // Second half of the animation
-      await next({
-        cameraPosition: getCameraPosition(toPosition),
-        target: getTarget(toPosition),
-      })
-    }
-
-    // Create sequence of animations for all countries in the location
     const animate = async () => {
       const currentPosition = getCountryCoords(currentLocation.id)
       if (!currentPosition) return
 
-      api.start({
-        to: async (next) => {
-          const prevIndex =
-            (currentLocationIndex - 1 + selectedLocations.length) %
-            selectedLocations.length
-          const prevLocation = selectedLocations[prevIndex]
+      isAnimatingRef.current = true
 
-          if (prevLocation) {
-            const prevPosition = getCountryCoords(prevLocation.id)
-            if (prevPosition) {
-              await next({
-                cameraPosition: getCameraPosition(currentPosition),
-                target: getTarget(currentPosition),
-                config: { duration: 1500 }, // Adjust animation duration
+      try {
+        const prevIndex =
+          (currentLocationIndex - 1 + selectedLocations.length) %
+          selectedLocations.length
+        const prevLocation = selectedLocations[prevIndex]
+
+        if (prevLocation) {
+          const prevPosition = getCountryCoords(prevLocation.id)
+          if (prevPosition) {
+            // Calculate animation points
+            const angle = prevPosition.angleTo(currentPosition)
+            const rotationAxis = new THREE.Vector3()
+              .crossVectors(prevPosition, currentPosition)
+              .normalize()
+
+            if (rotationAxis.lengthSq() < 0.001) {
+              rotationAxis.set(0, 1, 0)
+            }
+
+            // Create interpolation points
+            const numPoints = 5
+            const points: THREE.Vector3[] = []
+
+            for (let i = 0; i < numPoints; i++) {
+              const t = i / (numPoints - 1)
+              const quaternion = new THREE.Quaternion()
+              quaternion.setFromAxisAngle(rotationAxis, angle * t)
+
+              const point = prevPosition.clone()
+              point.applyQuaternion(quaternion)
+
+              const heightOffset = Math.sin(t * Math.PI) * 2
+              point
+                .normalize()
+                .multiplyScalar(15 + heightOffset)
+                .add(new THREE.Vector3(0, 4, 0))
+
+              points.push(point)
+            }
+
+            // Animate through points
+            for (const point of points) {
+              const lookAtPoint = currentPosition
+                .clone()
+                .normalize()
+                .multiplyScalar(radius)
+
+              await api.start({
+                cameraPosition: [point.x, point.y, point.z],
+                target: [lookAtPoint.x, lookAtPoint.y, lookAtPoint.z],
+                config: springConfig.slow,
               })
             }
-          } else {
-            await next({
-              cameraPosition: getCameraPosition(currentPosition),
-              target: getTarget(currentPosition),
-              config: { duration: 1500 },
-            })
           }
-        },
-      })
+        } else {
+          // Direct animation to first location
+          const cameraPos = getCameraPosition(currentPosition)
+          const targetPos = getTarget(currentPosition)
+          await api.start({
+            cameraPosition: cameraPos,
+            target: targetPos,
+            config: springConfig.slow,
+          })
+        }
+      } finally {
+        isAnimatingRef.current = false
+      }
     }
 
     animate()

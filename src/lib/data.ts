@@ -4,7 +4,7 @@ export type Company = {
   name: string
   countries: {
     name: CountryKey
-    id: number
+    id: string
   }[]
 }
 
@@ -22,21 +22,21 @@ export const locations: LocationGroup[] = [
       {
         name: 'City Electric Supplies (CES)',
         countries: [
-          { name: 'United States', id: 840 },
-          { name: 'Canada', id: 124 },
+          { name: 'United States', id: '840' },
+          { name: 'Canada', id: '124' },
         ],
       },
       {
         name: 'City Electrical Factors (CEF)',
         countries: [
-          { name: 'United Kingdom', id: 826 },
-          { name: 'Ireland', id: 372 },
-          { name: 'Spain', id: 724 },
+          { name: 'United Kingdom', id: '826' },
+          { name: 'Ireland', id: '372' },
+          { name: 'Spain', id: '724' },
           {
             name: 'Offshore Islands (Guernsey, Gibraltar, Isle of Man, Jersey)',
-            id: 4,
+            id: '4',
           },
-          { name: 'Australia', id: 36 },
+          { name: 'Australia', id: '036' },
         ],
       },
     ],
@@ -47,14 +47,14 @@ export const locations: LocationGroup[] = [
       {
         name: 'Segen',
         countries: [
-          { name: 'United Kingdom', id: 826 },
-          { name: 'South Africa', id: 710 },
-          { name: 'Germany', id: 276 },
+          { name: 'United Kingdom', id: '826' },
+          { name: 'South Africa', id: '710' },
+          { name: 'Germany', id: '276' },
         ],
       },
       {
         name: 'Soligent',
-        countries: [{ name: 'United States', id: 840 }],
+        countries: [{ name: 'United States', id: '840' }],
       },
     ],
   },
