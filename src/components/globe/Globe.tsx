@@ -3,17 +3,23 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import * as THREE from 'three'
-import { useSpring } from '@react-spring/three'
+import { useSpring, config as springConfig } from '@react-spring/three'
 import Sphere from './Sphere'
 import { Dots } from './Dots'
-import Marker from './Marker'
-import cefLogo from '/cef.png?url'
+
 import { coordinates, type CountryKey } from '@/lib/data'
+import CountryParticles from './CountryParticles'
 
 type Props = {
   radius?: number
   dotsOffset?: number
-  selectedLocation: CountryKey | null
+  selectedLocations: {
+    name: CountryKey
+    id: string
+  }[]
+  autoRotate?: boolean
+  onAnimationComplete?: () => void
+  onAnimationStep?: (index: number) => void
 }
 
 type SpringValues = {
@@ -21,10 +27,18 @@ type SpringValues = {
   target: [number, number, number]
 }
 
-export function Globe({ radius = 8, dotsOffset = 0, selectedLocation }: Props) {
-  const markerRef = useRef<THREE.Mesh>(null)
+export function Globe({
+  radius = 10,
+  dotsOffset = 0,
+  selectedLocations,
+  autoRotate = false,
+  onAnimationComplete,
+  onAnimationStep,
+}: Props) {
   const controlsRef = useRef<OrbitControlsImpl>(null)
-  const [markerMounted, setMarkerMounted] = useState(false)
+  const [currentLocationIndex, setCurrentLocationIndex] = useState(0)
+  const animationTimeoutRef = useRef<NodeJS.Timeout>()
+  const isAnimatingRef = useRef(false)
 
   const [{ cameraPosition }, api] = useSpring<SpringValues>(() => ({
     cameraPosition: [1, 4, 15],
@@ -38,70 +52,166 @@ export function Globe({ radius = 8, dotsOffset = 0, selectedLocation }: Props) {
     },
   }))
 
-  // Position the marker whenever it's mounted or the selection changes
+  // Modify the auto-rotate effect
   useEffect(() => {
-    if (
-      !markerRef.current ||
-      !selectedLocation ||
-      !markerMounted ||
-      !controlsRef.current
-    )
-      return
+    if (!autoRotate || !selectedLocations?.length) return
 
-    // Convert latitude and longitude to 3D coordinates
-    const phi = (90 - coordinates[selectedLocation].lat) * (Math.PI / 180)
-    const theta = (coordinates[selectedLocation].lon + 180) * (Math.PI / 180)
+    const rotateToNextLocation = async () => {
+      if (isAnimatingRef.current) {
+        // If still animating, try again in 500ms
+        animationTimeoutRef.current = setTimeout(rotateToNextLocation, 500)
+        return
+      }
 
-    // Calculate position on the sphere's surface
-    const x = -(radius + 0.1) * Math.sin(phi) * Math.cos(theta)
-    const y = (radius + 0.1) * Math.cos(phi)
-    const z = (radius + 0.1) * Math.sin(phi) * Math.sin(theta)
+      if (currentLocationIndex === selectedLocations.length - 1) {
+        onAnimationComplete?.()
+      } else {
+        setCurrentLocationIndex((prev) => {
+          const next = (prev + 1) % selectedLocations.length
+          onAnimationStep?.(next)
+          return next
+        })
+      }
+    }
 
-    markerRef.current.position.set(x, y, z)
+    // Initial step notification
+    onAnimationStep?.(currentLocationIndex)
 
-    // Calculate rotation to make the marker face outward from the globe's center
-    const position = new THREE.Vector3(x, y, z)
-    const up = new THREE.Vector3(0, 1, 0)
-    const matrix = new THREE.Matrix4()
+    // Clear any existing timeout
+    if (animationTimeoutRef.current) {
+      clearTimeout(animationTimeoutRef.current)
+    }
 
-    matrix.lookAt(
-      position,
-      position.clone().add(position.clone().normalize()),
-      up,
-    )
+    // Set new timeout for next location
+    animationTimeoutRef.current = setTimeout(rotateToNextLocation, 2500)
 
-    markerRef.current.quaternion.setFromRotationMatrix(matrix)
+    return () => {
+      if (animationTimeoutRef.current) {
+        clearTimeout(animationTimeoutRef.current)
+      }
+    }
+  }, [
+    autoRotate,
+    selectedLocations,
+    currentLocationIndex,
+    onAnimationComplete,
+    onAnimationStep,
+  ])
 
-    // Calculate camera position to view the selected location
-    const cameraDistance = 15
-    const newCameraPosition = position
-      .clone()
-      .normalize()
-      .multiplyScalar(cameraDistance)
-    newCameraPosition.y += 4
-
-    // Animate to new position
-    api.start({
-      to: {
-        cameraPosition: [
-          newCameraPosition.x,
-          newCameraPosition.y,
-          newCameraPosition.z,
-        ],
-        target: [position.x * 0.9, position.y * 0.9, position.z * 0.9],
-      },
-      config: {
-        tension: 120,
-        friction: 14,
-        duration: 1000,
-      },
-    })
-  }, [radius, selectedLocation, markerMounted, api])
-
-  // Reset markerMounted when selection changes
+  // Modify the camera position effect to use currentLocationIndex
   useEffect(() => {
-    setMarkerMounted(false)
-  }, [selectedLocation])
+    if (!selectedLocations?.length || !controlsRef.current) return
+
+    const currentLocation = selectedLocations[currentLocationIndex]
+
+    // Function to get 3D coordinates for a country ID
+    const getCountryCoords = (countryId: string) => {
+      const location = selectedLocations.find((loc) => loc.id === countryId)
+      if (!location) return null
+
+      const phi = (90 - coordinates[location.name].lat) * (Math.PI / 180)
+      const theta = (coordinates[location.name].lon + 180) * (Math.PI / 180)
+
+      const x = -(radius + 0.1) * Math.sin(phi) * Math.cos(theta)
+      const y = (radius + 0.1) * Math.cos(phi)
+      const z = (radius + 0.1) * Math.sin(phi) * Math.sin(theta)
+
+      return new THREE.Vector3(x, y, z)
+    }
+
+    const getCameraPosition = (
+      position: THREE.Vector3,
+      distance: number = 15,
+    ): [number, number, number] => {
+      const pos = position
+        .clone()
+        .normalize()
+        .multiplyScalar(distance)
+        .add(new THREE.Vector3(0, 4, 0))
+      return [pos.x, pos.y, pos.z]
+    }
+
+    const getTarget = (position: THREE.Vector3): [number, number, number] => {
+      return [position.x * 0.9, position.y * 0.9, position.z * 0.9]
+    }
+
+    const animate = async () => {
+      const currentPosition = getCountryCoords(currentLocation.id)
+      if (!currentPosition) return
+
+      isAnimatingRef.current = true
+
+      try {
+        const prevIndex =
+          (currentLocationIndex - 1 + selectedLocations.length) %
+          selectedLocations.length
+        const prevLocation = selectedLocations[prevIndex]
+
+        if (prevLocation) {
+          const prevPosition = getCountryCoords(prevLocation.id)
+          if (prevPosition) {
+            // Calculate animation points
+            const angle = prevPosition.angleTo(currentPosition)
+            const rotationAxis = new THREE.Vector3()
+              .crossVectors(prevPosition, currentPosition)
+              .normalize()
+
+            if (rotationAxis.lengthSq() < 0.001) {
+              rotationAxis.set(0, 1, 0)
+            }
+
+            // Create interpolation points
+            const numPoints = 5
+            const points: THREE.Vector3[] = []
+
+            for (let i = 0; i < numPoints; i++) {
+              const t = i / (numPoints - 1)
+              const quaternion = new THREE.Quaternion()
+              quaternion.setFromAxisAngle(rotationAxis, angle * t)
+
+              const point = prevPosition.clone()
+              point.applyQuaternion(quaternion)
+
+              const heightOffset = Math.sin(t * Math.PI) * 2
+              point
+                .normalize()
+                .multiplyScalar(15 + heightOffset)
+                .add(new THREE.Vector3(0, 4, 0))
+
+              points.push(point)
+            }
+
+            // Animate through points
+            for (const point of points) {
+              const lookAtPoint = currentPosition
+                .clone()
+                .normalize()
+                .multiplyScalar(radius)
+
+              await api.start({
+                cameraPosition: [point.x, point.y, point.z],
+                target: [lookAtPoint.x, lookAtPoint.y, lookAtPoint.z],
+                config: springConfig.slow,
+              })
+            }
+          }
+        } else {
+          // Direct animation to first location
+          const cameraPos = getCameraPosition(currentPosition)
+          const targetPos = getTarget(currentPosition)
+          await api.start({
+            cameraPosition: cameraPos,
+            target: targetPos,
+            config: springConfig.slow,
+          })
+        }
+      } finally {
+        isAnimatingRef.current = false
+      }
+    }
+
+    animate()
+  }, [radius, selectedLocations, currentLocationIndex, api])
 
   return (
     <Canvas
@@ -117,17 +227,13 @@ export function Globe({ radius = 8, dotsOffset = 0, selectedLocation }: Props) {
       <Suspense fallback={null}>
         <Dots radius={radius + dotsOffset / 10} />
       </Suspense>
-      {selectedLocation && (
-        <Marker
-          ref={markerRef}
-          country={selectedLocation}
-          logo={cefLogo}
-          blob={
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vitae velit nec leo posuere tincidunt.'
-          }
-          onAfterMount={() => setMarkerMounted(true)}
+      {selectedLocations?.map((location) => (
+        <CountryParticles
+          key={location.id}
+          radius={radius}
+          countryId={location.id.toString()}
         />
-      )}
+      ))}
       <OrbitControls
         ref={controlsRef}
         minDistance={5}

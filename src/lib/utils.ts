@@ -1,4 +1,6 @@
 import * as THREE from 'three'
+import { type ClassValue, clsx } from 'clsx'
+import { twMerge } from 'tailwind-merge'
 
 export const centerVector = new THREE.Vector3(0, 0, 0)
 
@@ -32,4 +34,8 @@ export const getImageData = (imageEl: HTMLImageElement) => {
   canv.drawImage(imageEl, 0, 0)
 
   return canv.getImageData(0, 0, ctx.width, ctx.height)
+}
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
 }
