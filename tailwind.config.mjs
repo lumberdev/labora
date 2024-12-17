@@ -34,6 +34,9 @@ export default {
       lineHeight: {
         tight: '1.2',
       },
+      screens: {
+        '2xl': '1440px',
+      },
     },
   },
   plugins: [],

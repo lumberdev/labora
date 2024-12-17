@@ -9,26 +9,28 @@ const year = new Date().getFullYear()
 ---
 
 <footer
-  class='grid px-10 pb-20 md:place-items-center md:py-24 lg:grid-flow-col lg:px-[100px]'
+  class="mx-auto grid max-w-[1440px] px-10 pb-20 md:place-items-center md:py-[100px] lg:grid-flow-col lg:px-[100px]"
 >
-  <div class='hidden flex-col gap-4 lg:row-start-1 lg:flex [&>svg]:h-12'>
+  <div
+    class="hidden flex-col gap-4 justify-self-start lg:row-start-1 lg:flex [&>svg]:h-12"
+  >
     <Fragment set:html={Logo} />
-    <p class='text-xs text-grey'>© {year} Labora. All rights reserved.</p>
+    <p class="text-xs text-grey">© {year} Labora. All rights reserved.</p>
   </div>
-  <div class='flex flex-col gap-5 pb-20 lg:flex-row lg:gap-[100px] lg:pb-0'>
-    <div class='mt-[9.53px] flex gap-5'>
-      <Image src={dallas} alt='dallas' class='h-[120px] w-[38px]' />
-      <div class='mt-5'>
-        <p class='pb-[10px] uppercase leading-tight tracking-wide'>Dallas</p>
+  <div class="flex flex-col gap-5 pb-20 lg:flex-row lg:gap-[100px] lg:pb-0">
+    <div class="mt-[9.53px] flex gap-5">
+      <Image src={dallas} alt="dallas" class="h-[120px] w-[38px]" />
+      <div class="mt-5">
+        <p class="pb-[10px] uppercase leading-tight tracking-wide">Dallas</p>
         <p>400 S. Record St.</p>
         <p>Suite 1600</p>
         <p>Dallas, TX 75202 USA</p>
       </div>
     </div>
-    <div class='flex gap-5'>
-      <Image src={london} alt='london' class='h-[129px] w-[25px]' />
-      <div class='mt-5'>
-        <p class='pb-[10px] uppercase leading-tight tracking-wide'>London</p>
+    <div class="flex gap-5">
+      <Image src={london} alt="london" class="h-[129px] w-[25px]" />
+      <div class="mt-5">
+        <p class="pb-[10px] uppercase leading-tight tracking-wide">London</p>
         <p>11 Dover St.</p>
         <p>London W1S 4JL</p>
         <p>United Kingdom</p>
@@ -36,34 +38,34 @@ const year = new Date().getFullYear()
     </div>
   </div>
   <div
-    class='flex flex-col items-center gap-5 lg:place-self-end lg:[&>svg]:hidden'
+    class="flex flex-col items-center gap-5 lg:place-self-end lg:[&>svg]:hidden"
   >
     <Fragment set:html={Logo} />
-    <div class='flex gap-5'>
+    <div class="flex gap-5">
       <a
-        href='mailto:info@labora.com'
-        target='_blank'
-        rel='noopener noreferrer'
+        href="mailto:info@labora.com"
+        target="_blank"
+        rel="noopener noreferrer"
       >
         <div
-          class='flex h-12 w-12 items-center justify-center rounded-full border border-white'
+          class="flex h-12 w-12 items-center justify-center rounded-full border border-white"
         >
           <Fragment set:html={Mail} />
         </div>
       </a>
       <a
-        href='https://www.linkedin.com/company/labora-inc'
-        target='_blank'
-        rel='noopener noreferrer'
+        href="https://www.linkedin.com/company/labora-inc"
+        target="_blank"
+        rel="noopener noreferrer"
       >
         <div
-          class='flex h-12 w-12 items-center justify-center rounded-full border border-white'
+          class="flex h-12 w-12 items-center justify-center rounded-full border border-white"
         >
           <Fragment set:html={LinkedIn} />
         </div>
       </a>
     </div>
-    <p class='text-xs text-grey lg:hidden'>
+    <p class="text-xs text-grey lg:hidden">
       © {year} Labora. All rights reserved.
     </p>
   </div>
