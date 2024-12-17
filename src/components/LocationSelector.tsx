@@ -77,16 +77,28 @@ const LocationSelector = () => {
                       key={company.name}
                       onClick={() => setSelectedCompany(company)}
                       className={cn(
-                        'grid grid-cols-[70px_max-content] items-center gap-[30px]',
+                        'flex items-center gap-[30px]',
                         company === selectedCompany
                           ? 'text-tan'
                           : 'hover:text-tan-light',
                       )}
                     >
-                      <div className="flex h-[70px] w-[70px] items-center justify-center px-[10px]">
+                      <div className="flex h-[70px] w-[70px] shrink-0 items-center justify-center px-[10px]">
                         <img src={company.logo} alt={company.name} />
                       </div>
-                      <span className="uppercase">{company.name}</span>
+                      <div className="flex flex-col items-start">
+                        <span className="uppercase">{company.name}</span>
+                        {company === selectedCompany && (
+                          <div className="text-nowrap">
+                            {company.countries.map((country, index, self) => (
+                              <span key={country.name} className="text-xs">
+                                {country.name}
+                                {index !== self.length - 1 ? ' • ' : ''}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </button>
                   ))}
                 </div>

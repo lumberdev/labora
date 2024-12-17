@@ -40,7 +40,7 @@ export const locations: LocationGroup[] = [
           { name: 'Ireland', id: '372' },
           { name: 'Spain', id: '724' },
           {
-            name: 'Offshore Islands (Guernsey, Gibraltar, Isle of Man, Jersey)',
+            name: 'Offshore Islands',
             id: '4',
           },
           { name: 'Australia', id: '036' },
@@ -75,7 +75,7 @@ export const coordinates = {
   Germany: { lat: 51.1657, lon: 6.8542 },
   'United States': { lat: 37.0902, lon: -109.4125 },
   Canada: { lat: 56.1304, lon: -106.3468 },
-  'Offshore Islands (Guernsey, Gibraltar, Isle of Man, Jersey)': {
+  'Offshore Islands': {
     lat: 49.4656,
     lon: -2.1186,
   },
