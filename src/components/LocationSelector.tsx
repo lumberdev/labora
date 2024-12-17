@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback, useRef } from 'react'
 import { Globe } from './globe/Globe'
 import { locations, type Company } from '@/lib/data'
 import { cn } from '@/lib/utils'
+import GlobeMagnifier from '/public/globe-magnifier.svg?react'
 
 const LocationSelector = () => {
   const [selectedCompany, setSelectedCompany] = useState<Company>(
@@ -60,23 +61,44 @@ const LocationSelector = () => {
 
   return (
     <div className="grid lg:min-h-[800px] lg:grid-cols-[min-content_1fr]">
-      <div className="order-2 h-full w-full overflow-auto p-6 md:order-1">
+      <div className="order-2 h-full w-full overflow-auto md:order-1">
         <div className="space-y-6">
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">{selectedCompany.name}</h3>
-            <ul className="space-y-2 pl-4">
-              {selectedCompany.countries.map((country, index) => (
-                <li
-                  key={country.id}
-                  className={cn(
-                    'transition-colors duration-300',
-                    index === currentCountryIndex && 'font-bold text-tan-light',
-                  )}
-                >
-                  {country.name}
-                </li>
-              ))}
-            </ul>
+          <div className="w-[500px] space-y-[30px]">
+            {locations.map((location) => (
+              <div key={location.label}>
+                <div className="mb-[10px] border-b border-grey pb-[10px]">
+                  <h2 className="text-xl uppercase text-tan">
+                    {location.label}
+                  </h2>
+                </div>
+                <div className="grid">
+                  {location.companies.map((company) => (
+                    <button
+                      key={company.name}
+                      onClick={() => setSelectedCompany(company)}
+                      className={cn(
+                        'grid grid-cols-[70px_max-content] items-center gap-[30px]',
+                        company === selectedCompany
+                          ? 'text-tan'
+                          : 'hover:text-tan-light',
+                      )}
+                    >
+                      <div className="flex h-[70px] w-[70px] items-center justify-center px-[10px]">
+                        <img src={company.logo} alt={company.name} />
+                      </div>
+                      <span className="uppercase">{company.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+            <div className="flex items-center gap-1 text-grey">
+              <GlobeMagnifier />
+              <p>Click on a company to explore its locations. </p>
+              <button className="bg-transparent m-0 cursor-pointer border-none p-0 underline">
+                (Reset View)
+              </button>
+            </div>
           </div>
         </div>
       </div>

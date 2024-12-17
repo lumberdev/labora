@@ -1,7 +1,12 @@
+import cefLogo from '../assets/logos/CEF.png?url'
+import cesLogo from '../assets/logos/CES.png?url'
+import segenLogo from '../assets/logos/Segen.png?url'
+import soligentLogo from '../assets/logos/Soligent.png?url'
 export type CountryKey = keyof typeof coordinates
 
 export type Company = {
   name: string
+  logo: string
   countries: {
     name: CountryKey
     id: string
@@ -17,10 +22,11 @@ export type LocationKey = Company['name']
 
 export const locations: LocationGroup[] = [
   {
-    label: 'Electrical Building Materials Distribution',
+    label: 'Electrical',
     companies: [
       {
         name: 'City Electric Supplies (CES)',
+        logo: cesLogo,
         countries: [
           { name: 'United States', id: '840' },
           { name: 'Canada', id: '124' },
@@ -28,6 +34,7 @@ export const locations: LocationGroup[] = [
       },
       {
         name: 'City Electrical Factors (CEF)',
+        logo: cefLogo,
         countries: [
           { name: 'United Kingdom', id: '826' },
           { name: 'Ireland', id: '372' },
@@ -42,10 +49,11 @@ export const locations: LocationGroup[] = [
     ],
   },
   {
-    label: 'Solar/Remewable Products Distribution',
+    label: 'Solar / Renewable',
     companies: [
       {
         name: 'Segen',
+        logo: segenLogo,
         countries: [
           { name: 'United Kingdom', id: '826' },
           { name: 'South Africa', id: '710' },
@@ -54,6 +62,7 @@ export const locations: LocationGroup[] = [
       },
       {
         name: 'Soligent',
+        logo: soligentLogo,
         countries: [{ name: 'United States', id: '840' }],
       },
     ],
