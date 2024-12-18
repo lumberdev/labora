@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback, useRef } from 'react'
 import { Globe } from './globe/Globe'
 import { locations, type Company } from '@/lib/data'
 import { cn } from '@/lib/utils'
-import GlobeMagnifier from '/public/globe-magnifier.svg?react'
+import GlobeMagnifier from '@/assets/icons/globe-magnifier.svg?react'
 
 const LocationSelector = () => {
   const [selectedCompany, setSelectedCompany] = useState<Company>(
