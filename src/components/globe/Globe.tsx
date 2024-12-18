@@ -162,6 +162,7 @@ export function Globe({
         maxPolarAngle={Math.PI * 0.55}
         enableZoom={false}
         enablePan={false}
+        enableRotate={false}
       />
     </Canvas>
   )

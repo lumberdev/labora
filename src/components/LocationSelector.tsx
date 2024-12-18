@@ -34,10 +34,10 @@ const LocationSelector = () => {
   }
 
   return (
-    <div className="grid lg:min-h-[800px] lg:grid-cols-[min-content_1fr]">
-      <div className="order-2 h-full w-full overflow-auto px-4 md:order-1 md:px-0">
+    <div className="lg:min-h-500px grid lg:grid-cols-[min-content_minmax(500px,1fr)] xl:min-h-[800px] xl:grid-cols-[min-content_minmax(800px,1fr)]">
+      <div className="order-2 h-full w-full overflow-auto px-4 md:px-0 lg:order-1">
         <div className="space-y-6">
-          <div className="space-y-[30px] md:w-[500px]">
+          <div className="w-max space-y-[30px] lg:max-w-[500px]">
             {locations.map((location) => (
               <div key={location.label}>
                 <div className="mb-[10px] border-b border-grey pb-[10px]">
