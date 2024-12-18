@@ -61,9 +61,9 @@ const LocationSelector = () => {
 
   return (
     <div className="grid lg:min-h-[800px] lg:grid-cols-[min-content_1fr]">
-      <div className="order-2 h-full w-full overflow-auto md:order-1">
+      <div className="order-2 h-full w-full overflow-auto px-4 md:order-1 md:px-0">
         <div className="space-y-6">
-          <div className="w-[500px] space-y-[30px]">
+          <div className="space-y-[30px] md:w-[500px]">
             {locations.map((location) => (
               <div key={location.label}>
                 <div className="mb-[10px] border-b border-grey pb-[10px]">
@@ -87,9 +87,11 @@ const LocationSelector = () => {
                         <img src={company.logo} alt={company.name} />
                       </div>
                       <div className="flex flex-col items-start">
-                        <span className="uppercase">{company.name}</span>
+                        <span className="text-sm uppercase">
+                          {company.name}
+                        </span>
                         {company === selectedCompany && (
-                          <div className="text-nowrap">
+                          <div>
                             {company.countries.map((country, index, self) => (
                               <span key={country.name} className="text-xs">
                                 {country.name}
@@ -104,7 +106,7 @@ const LocationSelector = () => {
                 </div>
               </div>
             ))}
-            <div className="flex items-center gap-1 text-grey">
+            <div className="flex items-center gap-1 text-xs text-grey">
               <GlobeMagnifier />
               <p>Click on a company to explore its locations. </p>
               <button className="bg-transparent m-0 cursor-pointer border-none p-0 underline">
