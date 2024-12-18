@@ -65,7 +65,7 @@ const LocationSelector = () => {
                           {company.name}
                         </span>
                         {company === selectedCompany && (
-                          <div>
+                          <div className="text-left">
                             {company.countries.map((country, index, self) => (
                               <span key={country.name} className="text-xs">
                                 {country.name}
