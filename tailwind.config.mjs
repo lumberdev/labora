@@ -34,6 +34,17 @@ export default {
       lineHeight: {
         tight: '1.2',
       },
+      padding: {
+        12.5: '3.125rem',
+        25: '6.25rem',
+      },
+      margin: {
+        12.5: '3.125rem',
+        25: '6.25rem',
+      },
+      screens: {
+        '2xl': '1440px',
+      },
     },
   },
   plugins: [],

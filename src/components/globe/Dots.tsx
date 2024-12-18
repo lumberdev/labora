@@ -15,7 +15,7 @@ type Props = {
   dotRadius?: number
 }
 
-export function Dots({ count = 200000, radius = 6.2, dotRadius = 2 }: Props) {
+export function Dots({ count = 100000, radius = 6.2, dotRadius = 3 }: Props) {
   const ref = useRef<THREE.InstancedMesh>(null)
 
   const mapElement = useLoader(THREE.ImageLoader, '/world-map.png')

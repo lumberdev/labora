@@ -5,22 +5,24 @@ import Hamburger from '/hamburger.svg?raw'
 import MobileNav from './MobileNav.tsx'
 ---
 
-<header class='sticky top-0 z-50 bg-grey-dark'>
-  <nav class='flex items-center justify-between gap-10 py-8'>
+<header class="sticky top-0 z-50 bg-grey-dark">
+  <nav
+    class="md:px-12.5 mx-auto flex max-w-[1440px] items-center justify-between gap-10 px-5 py-8"
+  >
     <div>
       <Fragment set:html={Logo} />
     </div>
 
-    <div class='hidden gap-10 uppercase md:flex'>
+    <div class="hidden gap-10 uppercase md:flex">
       {
         anchors.map((anchor) => (
-          <a class='font-sans tracking-wide' href={`#${anchor}`}>
+          <a class="font-sans tracking-wide" href={`#${anchor}`}>
             {anchor}
           </a>
         ))
       }
     </div>
-    <div class='md:hidden'>
+    <div class="md:hidden">
       <MobileNav anchors={anchors} client:load>
         <Fragment set:html={Hamburger} />
       </MobileNav>

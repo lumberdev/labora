@@ -8,15 +8,15 @@ import Investments from '../components/investments.astro'
 import Impact from '../components/impact.astro'
 ---
 
-<html lang='en'>
+<html lang="en">
   <head>
-    <meta charset='utf-8' />
-    <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
-    <meta name='viewport' content='width=device-width' />
-    <meta name='generator' content={Astro.generator} />
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
     <title>Labora</title>
   </head>
-  <body class='bg-grey-dark text-white'>
+  <body class="bg-grey-dark text-white">
     <main>
       <Nav />
       <About />
@@ -42,23 +42,10 @@ import Impact from '../components/impact.astro'
     padding-right: 1.25rem;
   }
 
-  main > section:not(:first-of-type) {
-    padding-left: 40px;
-    padding-right: 40px;
-  }
-
   @media (min-width: 768px) {
     header > nav {
       padding-left: 50px;
       padding-right: 50px;
-    }
-
-    main > section:not(:first-of-type) {
-      max-width: 1440px;
-      margin-left: auto;
-      margin-right: auto;
-      padding-left: 100px;
-      padding-right: 100px;
     }
   }
 </style>
