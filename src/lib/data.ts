@@ -26,7 +26,7 @@ export const locations: LocationGroup[] = [
     label: 'Electrical',
     companies: [
       {
-        name: 'City Electric Supplies (CES)',
+        name: 'City Electric Supply (CES)',
         logo: cesLogo,
         website: 'https://www.cityelectricsupply.com/',
         countries: [
