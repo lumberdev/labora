@@ -8,17 +8,17 @@ const LocationSelector = () => {
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null)
 
   // Get all unique countries across all companies
-  const allCountries = Array.from(
-    new Set(
-      locations
-        .flatMap((location) => location.companies)
-        .flatMap((company) => company.countries)
-        .map((country) => ({
-          name: country.name as CountryKey,
-          id: country.id,
-        })),
-    ),
-  )
+  const allCountries = locations
+    .flatMap((location) => location.companies)
+    .flatMap((company) => company.countries)
+    .filter(
+      (country, index, self) =>
+        index === self.findIndex((c) => c.id === country.id),
+    )
+    .map((country) => ({
+      name: country.name as CountryKey,
+      id: country.id,
+    }))
 
   // Get countries for current view (either all countries or selected company's countries)
   const displayedCountries = selectedCompany
@@ -37,7 +37,7 @@ const LocationSelector = () => {
     <div className="lg:min-h-500px grid lg:grid-cols-[min-content_minmax(500px,1fr)] xl:min-h-[800px] xl:grid-cols-[min-content_minmax(800px,1fr)]">
       <div className="order-2 h-full w-full overflow-auto px-4 md:px-0 lg:order-1">
         <div className="space-y-6">
-          <div className="w-max space-y-[30px] lg:max-w-[500px]">
+          <div className="w-[calc(100vw-2rem)] space-y-[30px] lg:w-[500px]">
             {locations.map((location) => (
               <div key={location.label}>
                 <div className="mb-[10px] border-b border-grey pb-[10px]">
@@ -65,13 +65,23 @@ const LocationSelector = () => {
                           {company.name}
                         </span>
                         {company === selectedCompany && (
-                          <div className="text-left">
-                            {company.countries.map((country, index, self) => (
-                              <span key={country.name} className="text-xs">
-                                {country.name}
-                                {index !== self.length - 1 ? ' • ' : ''}
-                              </span>
-                            ))}
+                          <div className="grid gap-1 text-left">
+                            <div>
+                              {company.countries.map((country, index, self) => (
+                                <span key={country.name} className="text-xs">
+                                  {country.name}
+                                  {index !== self.length - 1 ? ' • ' : ''}
+                                </span>
+                              ))}
+                            </div>
+                            <a
+                              className="text-xs underline"
+                              href={company.website}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              Website
+                            </a>
                           </div>
                         )}
                       </div>

@@ -102,6 +102,8 @@ export function Globe({
 
     const animate = async () => {
       const currentLocation = selectedLocations[currentLocationIndex]
+
+      if (!currentLocation) return
       const currentPosition = getCountryCoords(
         currentLocation.id,
         radius,
@@ -134,36 +136,40 @@ export function Globe({
   }, [selectedLocations, currentLocationIndex, radius, api])
 
   return (
-    <Canvas
-      className="order-1 min-h-[400px]"
-      camera={{
-        position: [1, CAMERA_Y_OFFSET, CAMERA_DISTANCE], // Set initial camera position with fixed distance
-        near: 1,
-        far: 50,
-      }}
-    >
-      <ambientLight />
-      <Sphere radius={radius} />
-      <Suspense fallback={null}>
-        <Dots radius={radius + dotsOffset / 10} />
-      </Suspense>
-      {selectedLocations?.map((location) => (
-        <CountryParticles
-          key={location.id}
-          radius={radius}
-          countryId={location.id.toString()}
+    <div className="relative order-1 min-h-[400px]">
+      <div className="absolute inset-0 z-40" />
+      <Canvas
+        className="relative z-10"
+        camera={{
+          position: [1, CAMERA_Y_OFFSET, CAMERA_DISTANCE], // Set initial camera position with fixed distance
+          near: 1,
+          far: 50,
+        }}
+      >
+        <ambientLight />
+        <Sphere radius={radius} />
+        <Suspense fallback={null}>
+          <Dots radius={radius + dotsOffset / 10} />
+        </Suspense>
+        {selectedLocations?.map((location) => (
+          <CountryParticles
+            key={location.id}
+            radius={radius}
+            countryId={location.id.toString()}
+          />
+        ))}
+        <OrbitControls
+          ref={controlsRef}
+          minDistance={CAMERA_DISTANCE}
+          maxDistance={CAMERA_DISTANCE}
+          minPolarAngle={Math.PI * 0.35}
+          maxPolarAngle={Math.PI * 0.55}
+          enableZoom={false}
+          enablePan={false}
+          enableRotate={false}
+          enabled={false}
         />
-      ))}
-      <OrbitControls
-        ref={controlsRef}
-        minDistance={CAMERA_DISTANCE}
-        maxDistance={CAMERA_DISTANCE}
-        minPolarAngle={Math.PI * 0.35}
-        maxPolarAngle={Math.PI * 0.55}
-        enableZoom={false}
-        enablePan={false}
-        enableRotate={false}
-      />
-    </Canvas>
+      </Canvas>
+    </div>
   )
 }

@@ -7,6 +7,7 @@ export type CountryKey = keyof typeof coordinates
 export type Company = {
   name: string
   logo: string
+  website: string
   countries: {
     name: CountryKey
     id: string
@@ -27,6 +28,7 @@ export const locations: LocationGroup[] = [
       {
         name: 'City Electric Supplies (CES)',
         logo: cesLogo,
+        website: 'https://www.cityelectricsupply.com/',
         countries: [
           { name: 'United States', id: '840' },
           { name: 'Canada', id: '124' },
@@ -35,6 +37,7 @@ export const locations: LocationGroup[] = [
       {
         name: 'City Electrical Factors (CEF)',
         logo: cefLogo,
+        website: 'https://www.cef.co.uk/',
         countries: [
           { name: 'United Kingdom', id: '826' },
           { name: 'Ireland', id: '372' },
@@ -54,6 +57,7 @@ export const locations: LocationGroup[] = [
       {
         name: 'Segen',
         logo: segenLogo,
+        website: 'https://www.segen.co.uk/',
         countries: [
           { name: 'United Kingdom', id: '826' },
           { name: 'South Africa', id: '710' },
@@ -63,6 +67,7 @@ export const locations: LocationGroup[] = [
       {
         name: 'Soligent',
         logo: soligentLogo,
+        website: 'https://www.soligent.net/',
         countries: [{ name: 'United States', id: '840' }],
       },
     ],
