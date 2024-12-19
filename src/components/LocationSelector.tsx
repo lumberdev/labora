@@ -8,17 +8,17 @@ const LocationSelector = () => {
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null)
 
   // Get all unique countries across all companies
-  const allCountries = Array.from(
-    new Set(
-      locations
-        .flatMap((location) => location.companies)
-        .flatMap((company) => company.countries)
-        .map((country) => ({
-          name: country.name as CountryKey,
-          id: country.id,
-        })),
-    ),
-  )
+  const allCountries = locations
+    .flatMap((location) => location.companies)
+    .flatMap((company) => company.countries)
+    .filter(
+      (country, index, self) =>
+        index === self.findIndex((c) => c.id === country.id),
+    )
+    .map((country) => ({
+      name: country.name as CountryKey,
+      id: country.id,
+    }))
 
   // Get countries for current view (either all countries or selected company's countries)
   const displayedCountries = selectedCompany
