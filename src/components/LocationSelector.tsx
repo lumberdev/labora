@@ -65,13 +65,23 @@ const LocationSelector = () => {
                           {company.name}
                         </span>
                         {company === selectedCompany && (
-                          <div className="text-left">
-                            {company.countries.map((country, index, self) => (
-                              <span key={country.name} className="text-xs">
-                                {country.name}
-                                {index !== self.length - 1 ? ' • ' : ''}
-                              </span>
-                            ))}
+                          <div className="grid gap-1 text-left">
+                            <div>
+                              {company.countries.map((country, index, self) => (
+                                <span key={country.name} className="text-xs">
+                                  {country.name}
+                                  {index !== self.length - 1 ? ' • ' : ''}
+                                </span>
+                              ))}
+                            </div>
+                            <a
+                              className="text-xs underline"
+                              href={company.website}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              Website
+                            </a>
                           </div>
                         )}
                       </div>
