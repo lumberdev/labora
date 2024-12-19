@@ -102,6 +102,8 @@ export function Globe({
 
     const animate = async () => {
       const currentLocation = selectedLocations[currentLocationIndex]
+
+      if (!currentLocation) return
       const currentPosition = getCountryCoords(
         currentLocation.id,
         radius,
