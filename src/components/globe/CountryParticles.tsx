@@ -23,7 +23,7 @@ const CountryParticles = ({ radius, countryId }: Props) => {
       uniforms: {
         time: { value: 0 },
         color: { value: new THREE.Color('#D6C099') },
-        areaScale: { value: 0 },
+        areaScale: { value: 1.0 },
       },
       vertexShader: `
         uniform float time;
@@ -46,13 +46,13 @@ const CountryParticles = ({ radius, countryId }: Props) => {
           // Apply displacement
           pos = pos * (1.0 + totalEffect);
           
-          // Calculate alpha based on height and area
+          // Calculate alpha based on height and area scale
           // Reduce base alpha for smaller countries (lower areaScale)
-          float baseAlpha = mix(0.2, 0.4, areaScale);
-          vAlpha = baseAlpha + totalEffect * 2.0;
+          float baseAlpha = 0.4;  // Reduced from 0.6
+          vAlpha = (baseAlpha + totalEffect * 1.5) * (0.7 + areaScale * 0.3);  // Adjusted multipliers
           
           vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-          gl_PointSize = mix(1.5, 2.0, areaScale);
+          gl_PointSize = 2.5;
           gl_Position = projectionMatrix * mvPosition;
         }
       `,
@@ -65,7 +65,7 @@ const CountryParticles = ({ radius, countryId }: Props) => {
           float dist = length(center);
           
           // Create softer particles with a glow effect
-          float alpha = smoothstep(0.5, 0.2, dist) * vAlpha;
+          float alpha = smoothstep(0.5, 0.2, dist) * min(1.0, vAlpha);
           
           // Add subtle glow
           vec3 finalColor = color + color * (1.0 - dist) * 0.5;
@@ -102,21 +102,15 @@ const CountryParticles = ({ radius, countryId }: Props) => {
 
       const bounds = getBounds(countryFeature)
       const area = calculateApproximateArea(bounds, countryFeature)
-      console.log(countryFeature.id, area)
 
       // Scale number of points based on actual country area
-      const basePoints = 80
-      const maxPoints = 7000
-      // Use cube root for smoother scaling with actual areas
-      const areaScale = Math.pow(Math.min(1, Math.max(0.0001, area * 8)), 0.33)
+      const basePoints = 50 // Significantly reduced base points
+      const maxPoints = 20000 // Slightly reduced max points
+      // More aggressive scaling for small countries
+      const areaScale = Math.pow(Math.min(1, Math.max(0.00001, area * 8)), 0.8)
       const numPoints = Math.floor(
         basePoints + (maxPoints - basePoints) * areaScale,
       )
-
-      // Update the area scale uniform
-      if (material) {
-        material.uniforms.areaScale.value = areaScale
-      }
 
       const positions: number[] = []
       const randoms: number[] = []
@@ -154,6 +148,8 @@ const CountryParticles = ({ radius, countryId }: Props) => {
       if (pointsRef.current) {
         pointsRef.current.geometry.dispose()
         pointsRef.current.geometry = geometry
+        // Update the area scale uniform
+        material.uniforms.areaScale.value = areaScale
       }
     }
 
