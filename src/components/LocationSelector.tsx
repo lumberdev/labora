@@ -6,6 +6,7 @@ import GlobeMagnifier from '@/assets/icons/globe-magnifier.svg?react'
 
 const LocationSelector = () => {
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null)
+  const [showCountries, setShowCountries] = useState(false)
 
   // Get all unique countries across all companies
   const allCountries = locations
@@ -27,10 +28,12 @@ const LocationSelector = () => {
 
   const handleCompanySelect = (company: Company) => {
     setSelectedCompany(company)
+    setShowCountries(false)
   }
 
   const handleResetView = () => {
     setSelectedCompany(null)
+    setShowCountries(false)
   }
 
   return (
@@ -58,21 +61,45 @@ const LocationSelector = () => {
                       )}
                     >
                       <div className="flex h-[70px] w-[70px] shrink-0 items-center justify-center px-[10px]">
-                        <img src={company.logo} alt={company.name} />
+                        <img src={company.logo} alt={company.name + ' logo'} />
                       </div>
-                      <div className="flex flex-col items-start">
+                      <div className="flex w-full flex-col items-start">
                         <span className="text-sm uppercase">
                           {company.name}
                         </span>
                         {company === selectedCompany && (
-                          <div className="grid gap-1 text-left">
-                            <div>
-                              {company.countries.map((country, index, self) => (
-                                <span key={country.name} className="text-xs">
-                                  {country.name}
-                                  {index !== self.length - 1 ? ' • ' : ''}
-                                </span>
-                              ))}
+                          <div className="grid w-full gap-1 text-left">
+                            <div className="relative w-full">
+                              <span
+                                className="text-xs"
+                                onMouseEnter={() => setShowCountries(true)}
+                                onMouseLeave={() => setShowCountries(false)}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  setShowCountries(!showCountries)
+                                }}
+                              >
+                                Active in {company.countries.length}{' '}
+                                {company.countries.length === 1
+                                  ? 'country'
+                                  : 'countries'}
+                              </span>
+                              <div
+                                aria-hidden={!showCountries}
+                                className={cn(
+                                  'absolute left-0 top-full z-10 mt-1 rounded bg-grey-dark p-2 text-xs opacity-0 shadow-lg transition-opacity',
+                                  showCountries ? 'opacity-100' : 'opacity-0',
+                                )}
+                              >
+                                {company.countries.map(
+                                  (country, index, self) => (
+                                    <span key={country.name}>
+                                      {country.name}
+                                      {index !== self.length - 1 ? ' • ' : ''}
+                                    </span>
+                                  ),
+                                )}
+                              </div>
                             </div>
                             <a
                               className="text-xs underline"
