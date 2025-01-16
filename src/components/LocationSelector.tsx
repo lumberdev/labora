@@ -61,7 +61,7 @@ const LocationSelector = () => {
                       )}
                     >
                       <div className="flex h-[70px] w-[70px] shrink-0 items-center justify-center px-[10px]">
-                        <img src={company.logo} alt={company.name} />
+                        <img src={company.logo} alt={company.name + ' logo'} />
                       </div>
                       <div className="flex w-full flex-col items-start">
                         <span className="text-sm uppercase">
