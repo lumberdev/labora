@@ -25,7 +25,7 @@ import HorizontalAnimation from './HorizontalAnimation'
     </div>
   </div>
   <div>
-    <div class='relative h-[250px] overflow-hidden md:h-[462px]'>
+    <div class='relative h-[250px] overflow-hidden md:h-[552px]'>
       <div class='absolute top-0 block h-[150px] md:hidden md:h-[232px]'>
         <HorizontalAnimation to={0} from={-50} client:load>
           <Image src={clouds} alt='Clouds' width={1269.5} format='webp' />
@@ -44,10 +44,20 @@ import HorizontalAnimation from './HorizontalAnimation'
           />
         </HorizontalAnimation>
       </div>
-      <div class='absolute bottom-0 hidden h-[434px] md:block'>
+      <div class='absolute bottom-0 hidden h-[525px] md:block'>
         <HorizontalAnimation to={-50} from={0} client:load>
-          <Image src={cityscapeDesktop} alt='Cityscape' width={2271} format='webp' />
-          <Image src={cityscapeDesktop} alt='Cityscape' width={2271} format='webp' />
+          <Image
+            src={cityscapeDesktop}
+            alt='Cityscape'
+            width={2271}
+            format='webp'
+          />
+          <Image
+            src={cityscapeDesktop}
+            alt='Cityscape'
+            width={2271}
+            format='webp'
+          />
           <Image
             src={cityscapeDesktop}
             alt='Cityscape'
@@ -59,8 +69,18 @@ import HorizontalAnimation from './HorizontalAnimation'
       </div>
       <div class='absolute bottom-0 block h-[250px] md:hidden'>
         <HorizontalAnimation to={-50} from={0} client:load>
-          <Image src={cityscapeMobile} alt='Cityscape' width={1269.5} format='webp' />
-          <Image src={cityscapeMobile} alt='Cityscape' width={1269.5} format='webp' />
+          <Image
+            src={cityscapeMobile}
+            alt='Cityscape'
+            width={1269.5}
+            format='webp'
+          />
+          <Image
+            src={cityscapeMobile}
+            alt='Cityscape'
+            width={1269.5}
+            format='webp'
+          />
         </HorizontalAnimation>
       </div>
     </div>
