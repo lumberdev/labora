@@ -23,9 +23,11 @@ const CountryParticles = ({ radius, countryId }: Props) => {
       uniforms: {
         time: { value: 0 },
         color: { value: new THREE.Color('#D6C099') },
+        areaScale: { value: 0 },
       },
       vertexShader: `
         uniform float time;
+        uniform float areaScale;
         attribute float random;
         varying float vAlpha;
         
@@ -44,11 +46,13 @@ const CountryParticles = ({ radius, countryId }: Props) => {
           // Apply displacement
           pos = pos * (1.0 + totalEffect);
           
-          // Calculate alpha based on height
-          vAlpha = 0.4 + totalEffect * 2.0;
+          // Calculate alpha based on height and area
+          // Reduce base alpha for smaller countries (lower areaScale)
+          float baseAlpha = mix(0.2, 0.4, areaScale);
+          vAlpha = baseAlpha + totalEffect * 2.0;
           
           vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-          gl_PointSize = 2.0;
+          gl_PointSize = mix(1.5, 2.0, areaScale);
           gl_Position = projectionMatrix * mvPosition;
         }
       `,
@@ -97,17 +101,22 @@ const CountryParticles = ({ radius, countryId }: Props) => {
       if (!countryFeature) return
 
       const bounds = getBounds(countryFeature)
-      const area = calculateApproximateArea(bounds)
+      const area = calculateApproximateArea(bounds, countryFeature)
+      console.log(countryFeature.id, area)
 
-      // Scale number of points based on area
-      // Base of 1000 points for smallest countries
-      // Up to 8000 for largest countries
-      const basePoints = 1000
-      const maxPoints = 8000
-      const areaScale = Math.min(1, Math.max(0.1, area * 10)) // Normalize area to 0.1-1 range
+      // Scale number of points based on actual country area
+      const basePoints = 80
+      const maxPoints = 7000
+      // Use cube root for smoother scaling with actual areas
+      const areaScale = Math.pow(Math.min(1, Math.max(0.0001, area * 8)), 0.33)
       const numPoints = Math.floor(
         basePoints + (maxPoints - basePoints) * areaScale,
       )
+
+      // Update the area scale uniform
+      if (material) {
+        material.uniforms.areaScale.value = areaScale
+      }
 
       const positions: number[] = []
       const randoms: number[] = []
@@ -185,16 +194,50 @@ function getBounds(feature: CountryFeature) {
   return { minLat, maxLat, minLon, maxLon }
 }
 
-function calculateApproximateArea(bounds: ReturnType<typeof getBounds>) {
-  // Convert to radians
-  const latRange = (bounds.maxLat - bounds.minLat) * (Math.PI / 180)
-  const lonRange = (bounds.maxLon - bounds.minLon) * (Math.PI / 180)
+function calculateApproximateArea(
+  bounds: ReturnType<typeof getBounds>,
+  feature: CountryFeature,
+) {
+  // Helper function to calculate area of a polygon on a sphere
+  function sphericalPolygonArea(coords: number[][]) {
+    let area = 0
+    if (coords.length < 3) return area
 
-  // Approximate area calculation (simplified spherical geometry)
-  const area = Math.abs(
-    latRange * lonRange * Math.cos((bounds.minLat * Math.PI) / 180),
-  )
-  return area
+    // Convert to radians
+    const points = coords.map(([lon, lat]) => ({
+      lon: lon * (Math.PI / 180),
+      lat: lat * (Math.PI / 180),
+    }))
+
+    // Add first point to close the polygon
+    points.push(points[0])
+
+    // Calculate area using spherical excess formula
+    for (let i = 0; i < points.length - 1; i++) {
+      const p1 = points[i]
+      const p2 = points[i + 1]
+      area += (p2.lon - p1.lon) * (2 + Math.sin(p1.lat) + Math.sin(p2.lat))
+    }
+
+    return Math.abs(area / 2)
+  }
+
+  // Calculate total area for all polygons
+  let totalArea = 0
+  if (feature.geometry.type === 'MultiPolygon') {
+    feature.geometry.coordinates.forEach((polys) => {
+      polys.forEach((ring) => {
+        totalArea += sphericalPolygonArea(ring)
+      })
+    })
+  } else {
+    feature.geometry.coordinates.forEach((ring) => {
+      totalArea += sphericalPolygonArea(ring)
+    })
+  }
+
+  // Normalize by maximum possible area (half sphere = 2π)
+  return totalArea / (2 * Math.PI)
 }
 
 function isPointInPolygon(lon: number, lat: number, feature: CountryFeature) {
