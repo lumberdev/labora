@@ -69,7 +69,7 @@ const LocationSelector = () => {
                         </span>
                         {company === selectedCompany && (
                           <div className="grid w-full gap-1 text-left">
-                            <div className="group relative w-full">
+                            <div className="relative w-full">
                               <span
                                 className="text-xs"
                                 onMouseEnter={() => setShowCountries(true)}
@@ -85,9 +85,9 @@ const LocationSelector = () => {
                                   : 'countries'}
                               </span>
                               <div
+                                aria-hidden={!showCountries}
                                 className={cn(
                                   'absolute left-0 top-full z-10 mt-1 rounded bg-grey-dark p-2 text-xs opacity-0 shadow-lg transition-opacity',
-                                  'lg:group-hover:opacity-100',
                                   showCountries ? 'opacity-100' : 'opacity-0',
                                 )}
                               >
