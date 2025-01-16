@@ -127,6 +127,12 @@ export const animateBetweenPoints = async (
     rotationAxis.set(0, 1, 0)
   }
 
+  // Calculate duration based on angle (which represents the arc distance)
+  // Scale between 800ms for small movements and 2000ms for large movements
+  const minDuration = 1000
+  const maxDuration = 3000
+  const duration = minDuration + (maxDuration - minDuration) * (angle / Math.PI)
+
   const numPoints = 3
   const points = createInterpolationPoints(
     prevPosition,
@@ -146,7 +152,7 @@ export const animateBetweenPoints = async (
       target: [lookAtPoint.x, lookAtPoint.y, lookAtPoint.z],
       config: {
         ...springConfig.slow,
-        duration: 800,
+        duration,
       },
     })
   }
@@ -159,12 +165,21 @@ export const animateDirectToPoint = async (
   const cameraPos = getCameraPosition(position)
   const targetPos = getTarget(position)
 
+  // For direct animation, use a simpler distance-based duration
+  const minDuration = 1500
+  const maxDuration = 3000
+  const currentPos = new THREE.Vector3(...cameraPos)
+  const distance = currentPos.distanceTo(position)
+  const duration =
+    minDuration +
+    (maxDuration - minDuration) * (distance / (CAMERA_DISTANCE * 2))
+
   await api.start({
     cameraPosition: cameraPos,
     target: targetPos,
     config: {
       ...springConfig.slow,
-      duration: 800,
+      duration,
     },
   })
 }
