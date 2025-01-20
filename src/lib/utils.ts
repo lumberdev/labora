@@ -129,8 +129,8 @@ export const animateBetweenPoints = async (
 
   // Calculate duration based on angle (which represents the arc distance)
   // Scale between 800ms for small movements and 2000ms for large movements
-  const minDuration = 1000
-  const maxDuration = 3000
+  const minDuration = 1500
+  const maxDuration = 4000
   const duration = minDuration + (maxDuration - minDuration) * (angle / Math.PI)
 
   const numPoints = 3
@@ -167,7 +167,7 @@ export const animateDirectToPoint = async (
 
   // For direct animation, use a simpler distance-based duration
   const minDuration = 1500
-  const maxDuration = 3000
+  const maxDuration = 4000
   const currentPos = new THREE.Vector3(...cameraPos)
   const distance = currentPos.distanceTo(position)
   const duration =
