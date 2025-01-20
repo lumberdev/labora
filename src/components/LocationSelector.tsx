@@ -3,10 +3,18 @@ import { Globe } from './globe/Globe'
 import { locations, type Company, type CountryKey } from '@/lib/data'
 import { cn } from '@/lib/utils'
 import GlobeMagnifier from '@/assets/icons/globe-magnifier.svg?react'
+import { useTransition, animated, SpringValue } from '@react-spring/web'
 
 const LocationSelector = () => {
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null)
   const [showCountries, setShowCountries] = useState(false)
+
+  const countryTransition = useTransition(showCountries, {
+    from: { opacity: 0, transform: 'translateY(-4px)' },
+    enter: { opacity: 1, transform: 'translateY(0px)' },
+    leave: { opacity: 0, transform: 'translateY(-4px)' },
+    config: { tension: 300, friction: 20 },
+  })
 
   // Get all unique countries across all companies
   const allCountries = locations
@@ -50,26 +58,42 @@ const LocationSelector = () => {
                 </div>
                 <div className="grid">
                   {location.companies.map((company) => (
-                    <button
+                    <div
                       key={company.name}
-                      onClick={() => handleCompanySelect(company)}
                       className={cn(
-                        'flex items-center gap-[30px]',
+                        'grid grid-cols-[70px_1fr] gap-[30px]',
                         company === selectedCompany
                           ? 'text-tan'
                           : 'hover:text-tan-light',
                       )}
                     >
-                      <div className="flex h-[70px] w-[70px] shrink-0 items-center justify-center px-[10px]">
-                        <img src={company.logo} alt={company.name + ' logo'} />
-                      </div>
-                      <div className="flex w-full flex-col items-start">
-                        <span className="text-sm uppercase">
+                      <button
+                        onClick={() => handleCompanySelect(company)}
+                        className="flex h-[70px] w-[70px] shrink-0 items-center justify-center px-[10px]"
+                      >
+                        <img
+                          src={company.logo}
+                          alt={company.name + ' logo'}
+                          className="max-w-full"
+                        />
+                      </button>
+                      <div
+                        className={cn(
+                          'flex flex-col',
+                          !selectedCompany || selectedCompany !== company
+                            ? 'justify-center'
+                            : '',
+                        )}
+                      >
+                        <button
+                          onClick={() => handleCompanySelect(company)}
+                          className="text-left text-sm uppercase"
+                        >
                           {company.name}
-                        </span>
+                        </button>
                         {company === selectedCompany && (
-                          <div className="grid w-full gap-1 text-left">
-                            <div className="relative w-full">
+                          <div className="grid gap-1 text-left">
+                            <div className="relative">
                               <span
                                 className="text-xs"
                                 onMouseEnter={() => setShowCountries(true)}
@@ -84,22 +108,25 @@ const LocationSelector = () => {
                                   ? 'country'
                                   : 'countries'}
                               </span>
-                              <div
-                                aria-hidden={!showCountries}
-                                className={cn(
-                                  'absolute left-0 top-full z-10 mt-1 rounded bg-grey-dark p-2 text-xs opacity-0 shadow-lg transition-opacity',
-                                  showCountries ? 'opacity-100' : 'opacity-0',
-                                )}
-                              >
-                                {company.countries.map(
-                                  (country, index, self) => (
-                                    <span key={country.name}>
-                                      {country.name}
-                                      {index !== self.length - 1 ? ' • ' : ''}
-                                    </span>
-                                  ),
-                                )}
-                              </div>
+                              {countryTransition((style, item) =>
+                                item ? (
+                                  <animated.div
+                                    style={style}
+                                    className="absolute left-0 top-full z-10 mt-1 rounded bg-grey-dark p-2 text-xs shadow-lg"
+                                  >
+                                    {company.countries.map(
+                                      (country, index, self) => (
+                                        <span key={country.name}>
+                                          {country.name}
+                                          {index !== self.length - 1
+                                            ? ' • '
+                                            : ''}
+                                        </span>
+                                      ),
+                                    )}
+                                  </animated.div>
+                                ) : null,
+                              )}
                             </div>
                             <a
                               className="text-xs underline"
@@ -112,7 +139,7 @@ const LocationSelector = () => {
                           </div>
                         )}
                       </div>
-                    </button>
+                    </div>
                   ))}
                 </div>
               </div>

@@ -63,17 +63,20 @@ export function Globe({
   useEffect(() => {
     if (!autoRotate || !selectedLocations?.length) return
 
-    const rotateToNextLocation = () => {
-      if (isAnimatingRef.current) return
+    const ROTATION_DELAY = 6000 // 6 seconds between rotations
 
+    const rotateToNextLocation = () => {
+      if (isAnimatingRef.current) {
+        // If still animating, check again in 100ms
+        autoRotateTimeoutRef.current = setTimeout(rotateToNextLocation, 100)
+        return
+      }
+
+      // Only schedule next rotation after current animation is complete
       if (currentLocationIndex === selectedLocations.length - 1) {
         setCurrentLocationIndex(0)
       } else {
-        setCurrentLocationIndex((prev) => {
-          const next = (prev + 1) % selectedLocations.length
-
-          return next
-        })
+        setCurrentLocationIndex((prev) => (prev + 1) % selectedLocations.length)
       }
     }
 
@@ -85,8 +88,8 @@ export function Globe({
     // Schedule next rotation
     autoRotateTimeoutRef.current = setTimeout(
       rotateToNextLocation,
-      // No initial delay when starting, otherwise wait 2s between rotations
-      currentLocationIndex === 0 ? 0 : 2000,
+      // First rotation happens immediately, subsequent ones after delay
+      currentLocationIndex === 0 ? 0 : ROTATION_DELAY,
     )
 
     return () => {
