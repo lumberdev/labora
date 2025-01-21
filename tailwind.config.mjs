@@ -45,6 +45,12 @@ export default {
       screens: {
         '2xl': '1440px',
       },
+      keyframes: {
+        loading: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
+        },
+      },
     },
   },
   plugins: [],
