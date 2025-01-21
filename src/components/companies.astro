@@ -12,5 +12,15 @@ import LocationSelector from './LocationSelector'
     Operating Companies
   </h2>
 
-  <LocationSelector client:only='react' />
+  <LocationSelector client:only='react'>
+    <div slot='fallback' class='mx-auto w-full max-w-md p-4'>
+      <div class='relative h-2 max-w-xl overflow-hidden rounded-full'>
+        <div class='absolute h-full w-full bg-grey-light'></div>
+        <div
+          class='absolute h-full w-1/2 animate-[loading_1s_ease-in-out_infinite] bg-tan'
+        >
+        </div>
+      </div>
+    </div>
+  </LocationSelector>
 </section>

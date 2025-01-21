@@ -95,7 +95,7 @@ const LocationSelector = () => {
                           <div className="grid gap-1 text-left">
                             <div className="relative">
                               <span
-                                className="text-xs"
+                                className="cursor-pointer text-xs"
                                 onMouseEnter={() => setShowCountries(true)}
                                 onMouseLeave={() => setShowCountries(false)}
                                 onClick={(e) => {

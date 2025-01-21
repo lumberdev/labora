@@ -28,21 +28,28 @@ import HorizontalAnimation from './HorizontalAnimation'
   </div>
   <div>
     <div class='relative h-[250px] overflow-hidden md:h-[552px]'>
-      <div class='absolute top-0 block h-[150px] md:hidden md:h-[232px]'>
-        <HorizontalAnimation to={0} from={-50} client:load>
-          <Image src={clouds} alt='Clouds' width={1269.5} format='webp' />
-          <Image src={clouds} alt='Clouds' width={1269.5} format='webp' />
-        </HorizontalAnimation>
-      </div>
       <div class='absolute top-0 hidden h-[150px] md:block md:h-[232px]'>
         <HorizontalAnimation to={0} from={-50} client:load>
-          <Image src={clouds} alt='Clouds' width={2048} format='webp' />
-          <Image src={clouds} alt='Clouds' width={2048} format='webp' />
+          <Image
+            src={clouds}
+            alt='Clouds'
+            width={2048}
+            format='webp'
+            loading='eager'
+          />
+          <Image
+            src={clouds}
+            alt='Clouds'
+            width={2048}
+            format='webp'
+            loading='eager'
+          />
           <Image
             src={clouds}
             alt='Clouds'
             width={2048}
             class='hidden xl:block'
+            loading='eager'
           />
         </HorizontalAnimation>
       </div>
@@ -53,12 +60,14 @@ import HorizontalAnimation from './HorizontalAnimation'
             alt='Cityscape'
             width={2271}
             format='webp'
+            loading='eager'
           />
           <Image
             src={cityscapeDesktop}
             alt='Cityscape'
             width={2271}
             format='webp'
+            loading='eager'
           />
           <Image
             src={cityscapeDesktop}
@@ -66,22 +75,43 @@ import HorizontalAnimation from './HorizontalAnimation'
             width={2271}
             class='hidden xl:block'
             format='webp'
+            loading='eager'
+          />
+        </HorizontalAnimation>
+      </div>
+      <div class='absolute top-0 block h-[150px] md:hidden md:h-[232px]'>
+        <HorizontalAnimation to={0} from={-50} client:load>
+          <Image
+            src={clouds}
+            alt='Clouds'
+            width={1269.5}
+            format='webp'
+            loading='eager'
+          />
+          <Image
+            src={clouds}
+            alt='Clouds'
+            width={1269.5}
+            format='webp'
+            loading='eager'
           />
         </HorizontalAnimation>
       </div>
       <div class='absolute bottom-0 block h-[250px] md:hidden'>
         <HorizontalAnimation to={-50} from={0} client:load>
           <Image
-            src={cityscapeDesktop}
+            src={cityscapeMobile}
             alt='Cityscape'
             width={1269.5}
             format='webp'
+            loading='eager'
           />
           <Image
-            src={cityscapeDesktop}
+            src={cityscapeMobile}
             alt='Cityscape'
             width={1269.5}
             format='webp'
+            loading='eager'
           />
         </HorizontalAnimation>
       </div>

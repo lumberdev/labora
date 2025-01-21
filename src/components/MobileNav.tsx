@@ -41,7 +41,11 @@ const MobileNav = ({ anchors, children }: Props) => {
 
   return (
     <div className="relative z-50">
-      <button onClick={() => setIsOpen(!isOpen)} className="relative z-50 p-2">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="relative z-50 p-2"
+        aria-label="Open navigation menu"
+      >
         {children}
       </button>
 
