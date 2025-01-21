@@ -4,9 +4,12 @@ import react from '@astrojs/react'
 import tailwind from '@astrojs/tailwind'
 import svgr from 'vite-plugin-svgr'
 
+import vercel from '@astrojs/vercel';
+
 // https://astro.build/config
 export default defineConfig({
   integrations: [react(), tailwind()],
+
   vite: {
     plugins: [
       svgr({
@@ -26,4 +29,6 @@ export default defineConfig({
       }),
     ],
   },
+
+  adapter: vercel(),
 })
