@@ -3,7 +3,7 @@ import { Globe } from './globe/Globe'
 import { locations, type Company, type CountryKey } from '@/lib/data'
 import { cn } from '@/lib/utils'
 import GlobeMagnifier from '@/assets/icons/globe-magnifier.svg?react'
-import { useTransition, animated, SpringValue } from '@react-spring/web'
+import { useTransition, animated } from '@react-spring/web'
 
 const LocationSelector = () => {
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null)
@@ -98,8 +98,7 @@ const LocationSelector = () => {
                                 className="cursor-pointer text-xs"
                                 onMouseEnter={() => setShowCountries(true)}
                                 onMouseLeave={() => setShowCountries(false)}
-                                onClick={(e) => {
-                                  e.stopPropagation()
+                                onClick={() => {
                                   setShowCountries(!showCountries)
                                 }}
                               >
@@ -129,7 +128,7 @@ const LocationSelector = () => {
                               )}
                             </div>
                             <a
-                              className="text-xs underline"
+                              className="w-fit text-xs underline"
                               href={company.website}
                               target="_blank"
                               rel="noopener noreferrer"
