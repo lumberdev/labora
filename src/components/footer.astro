@@ -18,9 +18,9 @@ const year = new Date().getFullYear()
     <p class='text-xs text-grey'>© {year} Labora. All rights reserved.</p>
   </div>
   <div class='lg:gap-25 flex flex-col gap-5 pb-20 lg:flex-row lg:pb-0'>
-    <div class='mt-[9.53px] flex gap-5'>
-      <Image src={dallas} alt='dallas' class='h-[120px] w-[38px]' />
-      <div class='mt-5'>
+    <div class='flex gap-5'>
+      <Image src={dallas} alt='dallas' width={50} height={120} />
+      <div class='mt-5 grid items-end'>
         <p class='pb-[10px] uppercase leading-tight tracking-wide'>Dallas</p>
         <p>400 S. Record St.</p>
         <p>Suite 1600</p>
@@ -28,8 +28,8 @@ const year = new Date().getFullYear()
       </div>
     </div>
     <div class='flex gap-5'>
-      <Image src={london} alt='london' class='h-[129px] w-[25px]' />
-      <div class='mt-5'>
+      <Image src={london} alt='london' width={25} height={129} />
+      <div class='mt-5 grid items-end'>
         <p class='pb-[10px] uppercase leading-tight tracking-wide'>London</p>
         <p>11 Dover St.</p>
         <p>London W1S 4JL</p>
