@@ -3,8 +3,8 @@ import { Image } from 'astro:assets'
 import Logo from '/labora-logo.svg?raw'
 import LinkedIn from '/linkedin.svg?raw'
 import Mail from '/mail.svg?raw'
-import dallas from '../assets/footer-dallas.png'
-import london from '../assets/footer-london.png'
+import dallas from '../assets/Dallas.png'
+import london from '../assets/London.png'
 const year = new Date().getFullYear()
 ---
 
@@ -19,7 +19,7 @@ const year = new Date().getFullYear()
   </div>
   <div class='lg:gap-25 flex flex-col gap-5 pb-20 lg:flex-row lg:pb-0'>
     <div class='flex gap-5'>
-      <Image src={dallas} alt='dallas' width={50} height={120} />
+      <Image src={dallas} alt='dallas' width={52} height={120} />
       <div class='mt-5 grid items-end'>
         <p class='pb-[10px] uppercase leading-tight tracking-wide'>Dallas</p>
         <p>400 S. Record St.</p>
@@ -28,7 +28,7 @@ const year = new Date().getFullYear()
       </div>
     </div>
     <div class='flex gap-5'>
-      <Image src={london} alt='london' width={25} height={129} />
+      <Image src={london} alt='london' width={52} height={120} />
       <div class='mt-5 grid items-end'>
         <p class='pb-[10px] uppercase leading-tight tracking-wide'>London</p>
         <p>11 Dover St.</p>
