@@ -6,12 +6,18 @@ import LocationSelector from './LocationSelector'
   id='companies'
   class='mx-auto mb-8 max-w-[1440px] md:my-25 md:px-12.5 xl:px-25'
 >
-  <h2
-    class='mb-8 px-4 text-4xl uppercase tracking-wide md:mb-[70px] md:px-0 md:text-6xl'
-  >
-    Operating Companies
-  </h2>
-
+  <div class='mb-8 space-y-5 px-10 md:mb-[70px] md:px-0'>
+    <h2 class='text-4xl uppercase tracking-wide md:text-6xl'>
+      Operating Companies
+    </h2>
+    <p class='text-xl leading-normal md:text-2xl'>
+      From a small shop in Coventry in 1951 to a global leader in electrical
+      materials distribution, our operating companies have grown organically
+      across 12 countries since their inception. In 2021, the Mackie Family
+      expanded into solar by acquiring two major distributors, aiming to become
+      the top global provider of solar products and solutions.
+    </p>
+  </div>
   <LocationSelector client:only='react'>
     <div slot='fallback' class='mx-auto w-full max-w-md p-4'>
       <div class='relative h-2 max-w-xl overflow-hidden rounded-full'>

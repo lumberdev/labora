@@ -8,7 +8,7 @@ import HorizontalAnimation from './HorizontalAnimation'
 
 <section id='about' class='gap-25 mb-25 grid'>
   <div
-    class='mx-auto flex w-full max-w-[1440px] flex-col gap-3 px-5 md:px-12.5 xl:flex-row xl:gap-8'
+    class='mx-auto mb-4 flex w-full max-w-[1440px] flex-col gap-3 px-5 md:px-12.5 xl:flex-row xl:gap-8'
   >
     <div class='max-w-[850px]'>
       <h1
@@ -21,94 +21,100 @@ import HorizontalAnimation from './HorizontalAnimation'
       <p class='text-sm !leading-normal md:text-lg lg:text-2xl'>
         By finding partners aligned with our values and empowering them with
         autonomy, stability, and long-term capital, we believe we can achieve
-        lasting success—and have fun along the way.
+        lasting success — and have fun along the way.
       </p>
     </div>
   </div>
   <div>
-    <div class='relative h-[250px] overflow-hidden md:h-[552px]'>
-      <div class='absolute top-0 hidden h-[150px] md:block md:h-[232px]'>
+    <div class='relative h-[300px] overflow-hidden md:h-[450px]'>
+      <div class='absolute top-0 hidden h-[200px] md:block'>
         <HorizontalAnimation to={0} from={-50} client:load>
           <Image
             src={clouds}
             alt='Clouds'
-            width={2048}
+            width={2128}
             format='webp'
             loading='eager'
+            quality={75}
           />
           <Image
             src={clouds}
             alt='Clouds'
-            width={2048}
+            width={2128}
             format='webp'
             loading='eager'
+            quality={75}
           />
           <Image
             src={clouds}
             alt='Clouds'
-            width={2048}
+            width={2128}
             class='hidden xl:block'
             loading='eager'
+            quality={75}
           />
         </HorizontalAnimation>
       </div>
-      <div class='absolute bottom-0 hidden h-[525px] md:block'>
+      <div class='absolute bottom-0 hidden h-[450px] md:block'>
         <HorizontalAnimation to={-50} from={0} client:load>
           <Image
             src={cityscapeDesktop}
             alt='Cityscape'
-            width={2271}
+            width={3439}
             format='webp'
             loading='eager'
+            quality={75}
           />
           <Image
             src={cityscapeDesktop}
             alt='Cityscape'
-            width={2271}
+            width={3439}
             format='webp'
             loading='eager'
+            quality={75}
           />
           <Image
             src={cityscapeDesktop}
             alt='Cityscape'
-            width={2271}
+            width={3439}
             class='hidden xl:block'
             format='webp'
             loading='eager'
+            quality={75}
           />
         </HorizontalAnimation>
       </div>
-      <div class='absolute top-0 block h-[150px] md:hidden md:h-[232px]'>
+      <div class='absolute top-0 block h-[100px] md:hidden'>
         <HorizontalAnimation to={0} from={-50} client:load>
           <Image
             src={clouds}
             alt='Clouds'
-            width={1269.5}
+            width={1064}
             format='webp'
             loading='eager'
           />
           <Image
             src={clouds}
             alt='Clouds'
-            width={1269.5}
+            width={1064}
             format='webp'
             loading='eager'
           />
         </HorizontalAnimation>
       </div>
-      <div class='absolute bottom-0 block h-[250px] md:hidden'>
+      <div class='absolute bottom-0 block h-[300px] md:hidden'>
         <HorizontalAnimation to={-50} from={0} client:load>
           <Image
             src={cityscapeMobile}
             alt='Cityscape'
-            width={1269.5}
+            width={2292}
             format='webp'
             loading='eager'
           />
           <Image
             src={cityscapeMobile}
             alt='Cityscape'
-            width={1269.5}
+            width={2292}
             format='webp'
             loading='eager'
           />
@@ -120,10 +126,10 @@ import HorizontalAnimation from './HorizontalAnimation'
     class='max-w-[900px] space-y-10 justify-self-center px-10 pb-10 pt-20 text-center text-xl font-normal leading-normal text-tan md:text-3xl'
   >
     <p>
-      Labora oversees the business and philanthropic interests of the Mackie
-      Family. We are focused on deploying capital into businesses and assets
-      that create long-term value for all stakeholders. We take a concentrated
-      approach to deploying capital and our ideal holding time is forever.
+      Labora manages the Mackie Family's business and philanthropic investments,
+      focusing on opportunities that create enduring value. We take a
+      thoughtful, sustainable approach, because when we invest, we believe in
+      going all in—and lifelong.
     </p>
   </div>
 </section>
