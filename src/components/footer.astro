@@ -5,6 +5,7 @@ import LinkedIn from '/linkedin.svg?raw'
 import Mail from '/mail.svg?raw'
 import dallas from '../assets/Dallas.png'
 import london from '../assets/London.png'
+import switzerland from '../assets/Switzerland.png'
 const year = new Date().getFullYear()
 ---
 
@@ -17,58 +18,90 @@ const year = new Date().getFullYear()
     <Fragment set:html={Logo} />
     <p class='text-xs text-grey'>© {year} Labora. All rights reserved.</p>
   </div>
-  <div class='lg:gap-25 flex flex-col gap-5 pb-20 lg:flex-row lg:pb-0'>
-    <div class='flex gap-5'>
-      <Image src={dallas} alt='dallas' width={52} height={120} />
-      <div class='mt-5 grid items-end'>
+  <div
+    class='flex flex-col items-center gap-5 pb-20 lg:flex-row lg:gap-8 lg:pb-0'
+  >
+    <div class='grid grid-cols-[110px_1fr] gap-5'>
+      <Image
+        src={dallas}
+        alt='dallas'
+        width={60}
+        height={120}
+        class='justify-self-center'
+      />
+      <div>
         <p class='pb-[10px] uppercase leading-tight tracking-wide'>Dallas</p>
         <p>400 S. Record St.</p>
         <p>Suite 1600</p>
-        <p>Dallas, TX 75202 USA</p>
+        <p>Dallas, TX</p>
+        <p>75202 USA</p>
       </div>
     </div>
-    <div class='flex gap-5'>
-      <Image src={london} alt='london' width={52} height={120} />
-      <div class='mt-5 grid items-end'>
+    <div class='grid grid-cols-[110px_1fr] gap-5'>
+      <Image
+        src={london}
+        alt='london'
+        width={101}
+        height={120}
+        class='justify-self-center'
+      />
+      <div>
         <p class='pb-[10px] uppercase leading-tight tracking-wide'>London</p>
         <p>11 Dover St.</p>
-        <p>London W1S 4JL</p>
+        <p>London</p>
+        <p>W1S 4JL</p>
         <p>United Kingdom</p>
       </div>
     </div>
-  </div>
-  <div
-    class='flex flex-col items-center gap-5 lg:place-self-end lg:[&>svg]:hidden'
-  >
-    <Fragment set:html={Logo} />
-    <div class='flex gap-5'>
-      <a
-        href='mailto:info@labora.com'
-        target='_blank'
-        rel='noopener noreferrer'
-        aria-label='Email'
-      >
-        <div
-          class='flex h-12 w-12 items-center justify-center rounded-full border border-white'
-        >
-          <Fragment set:html={Mail} />
-        </div>
-      </a>
-      <a
-        href='https://www.linkedin.com/company/labora-inc'
-        target='_blank'
-        rel='noopener noreferrer'
-        aria-label='LinkedIn'
-      >
-        <div
-          class='flex h-12 w-12 items-center justify-center rounded-full border border-white'
-        >
-          <Fragment set:html={LinkedIn} />
-        </div>
-      </a>
+    <div class='grid grid-cols-[110px_1fr] gap-5'>
+      <Image
+        src={switzerland}
+        alt='switzerland'
+        width={110}
+        height={120}
+        class='justify-self-center'
+      />
+      <div>
+        <p class='pb-[10px] uppercase leading-tight tracking-wide'>Bussigny</p>
+        <p>Cocoon, 6th floor.</p>
+        <p>Route de Sullens</p>
+        <p>1030, Bussigny</p>
+        <p>Switzerland</p>
+      </div>
     </div>
-    <p class='text-xs text-grey lg:hidden'>
-      © {year} Labora. All rights reserved.
-    </p>
+    <div
+      class='flex flex-col items-center gap-5 lg:place-self-end lg:[&>svg]:hidden'
+    >
+      <Fragment set:html={Logo} />
+      <div class='flex gap-5'>
+        <a
+          href='mailto:info@labora.com'
+          target='_blank'
+          rel='noopener noreferrer'
+          aria-label='Email'
+        >
+          <div
+            class='flex h-12 w-12 items-center justify-center rounded-full border border-white'
+          >
+            <Fragment set:html={Mail} />
+          </div>
+        </a>
+        <a
+          href='https://www.linkedin.com/company/labora-inc'
+          target='_blank'
+          rel='noopener noreferrer'
+          aria-label='LinkedIn'
+        >
+          <div
+            class='flex h-12 w-12 items-center justify-center rounded-full border border-white'
+          >
+            <Fragment set:html={LinkedIn} />
+          </div>
+        </a>
+      </div>
+      <p class='text-xs text-grey lg:hidden'>
+        © {year} Labora. All rights reserved.
+      </p>
+    </div>
   </div>
 </footer>
