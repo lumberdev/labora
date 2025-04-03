@@ -47,9 +47,8 @@ const CountryParticles = ({ radius, countryId }: Props) => {
           pos = pos * (1.0 + totalEffect);
           
           // Calculate alpha based on height and area scale
-          // Reduce base alpha for smaller countries (lower areaScale)
-          float baseAlpha = 0.4;  // Reduced from 0.6
-          vAlpha = (baseAlpha + totalEffect * 1.5) * (0.7 + areaScale * 0.3);  // Adjusted multipliers
+          float baseAlpha = 0.8; 
+          vAlpha = (baseAlpha + totalEffect * 1.5) * (0.7 + areaScale * 0.3);  
           
           vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
           gl_PointSize = 2.5;
@@ -104,23 +103,67 @@ const CountryParticles = ({ radius, countryId }: Props) => {
       const area = calculateApproximateArea(bounds, countryFeature)
 
       // Scale number of points based on actual country area
-      const basePoints = 50 // Significantly reduced base points
-      const maxPoints = 20000 // Slightly reduced max points
+      const basePoints = 100
+      const maxPoints = 30000
       // More aggressive scaling for small countries
       const areaScale = Math.pow(Math.min(1, Math.max(0.00001, area * 8)), 0.8)
       const numPoints = Math.floor(
         basePoints + (maxPoints - basePoints) * areaScale,
       )
 
+      // Store bounds and area for each sub-polygon if it's a MultiPolygon
+      let subPolygonsInfo: { bounds: ReturnType<typeof getBounds>; area: number }[] = [];
+      let totalSubPolygonArea = 0;
+
+      if (countryFeature.geometry.type === 'MultiPolygon') {
+        subPolygonsInfo = countryFeature.geometry.coordinates.map(polygonRings => {
+          const featurePart = {
+            type: 'Feature',
+            properties: {},
+            id: countryId || undefined,
+            geometry: { type: 'Polygon', coordinates: polygonRings }
+          } as CountryFeature;
+          const bounds = getBounds(featurePart);
+          const area = calculateApproximateArea(bounds, featurePart); // Calculate area for this sub-polygon
+          return { bounds, area };
+        });
+        totalSubPolygonArea = subPolygonsInfo.reduce((sum, info) => sum + info.area, 0);
+      }
+
       const positions: number[] = []
       const randoms: number[] = []
       let attempts = 0
-      const maxAttempts = numPoints * 10
+      const maxAttempts = numPoints * 20 // Keep reduced max attempts
 
       while (positions.length < numPoints * 3 && attempts < maxAttempts) {
-        const lat = randomBetween(bounds.minLat, bounds.maxLat)
-        const lon = randomBetween(bounds.minLon, bounds.maxLon)
+        let lat: number;
+        let lon: number;
 
+        if (countryFeature.geometry.type === 'MultiPolygon' && subPolygonsInfo.length > 0 && totalSubPolygonArea > 0) {
+          // Weighted random selection of sub-polygon based on area
+          let randomArea = Math.random() * totalSubPolygonArea;
+          let selectedIndex = -1;
+          for (let i = 0; i < subPolygonsInfo.length; i++) {
+            randomArea -= subPolygonsInfo[i].area;
+            if (randomArea <= 0) {
+              selectedIndex = i;
+              break;
+            }
+          }
+          // Fallback to last polygon if something went wrong with floating point math
+          if (selectedIndex === -1) selectedIndex = subPolygonsInfo.length - 1; 
+
+          const selectedBounds = subPolygonsInfo[selectedIndex].bounds;
+          lat = randomBetween(selectedBounds.minLat, selectedBounds.maxLat);
+          lon = randomBetween(selectedBounds.minLon, selectedBounds.maxLon);
+
+        } else {
+          // For simple Polygons, sample within the main bounds
+          lat = randomBetween(bounds.minLat, bounds.maxLat);
+          lon = randomBetween(bounds.minLon, bounds.maxLon);
+        }
+
+        // isPointInPolygon check still required as bounds are rectangular
         if (isPointInPolygon(lon, lat, countryFeature)) {
           const phi = (90 - lat) * (Math.PI / 180)
           const theta = (lon + 180) * (Math.PI / 180)
