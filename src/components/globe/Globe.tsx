@@ -28,7 +28,7 @@ export type SpringValues = {
   target: [number, number, number]
 }
 
-export const CAMERA_DISTANCE = 15
+export const CAMERA_DISTANCE = 20
 export const CAMERA_Y_OFFSET = 4
 
 export function Globe({
