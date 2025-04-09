@@ -28,7 +28,7 @@ export type SpringValues = {
   target: [number, number, number]
 }
 
-export const CAMERA_DISTANCE = 15
+export const CAMERA_DISTANCE = 20
 export const CAMERA_Y_OFFSET = 4
 
 export function Globe({
@@ -63,7 +63,7 @@ export function Globe({
   useEffect(() => {
     if (!autoRotate || !selectedLocations?.length) return
 
-    const ROTATION_DELAY = 6000 // 6 seconds between rotations
+    const ROTATION_DELAY = 8000 // 8 seconds between rotations
 
     const rotateToNextLocation = () => {
       if (isAnimatingRef.current) {
