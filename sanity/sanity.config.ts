@@ -1,16 +1,21 @@
 import {defineConfig} from 'sanity'
+
 import {structureTool} from 'sanity/structure'
-import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
+import {structure} from './structure'
 
 export default defineConfig({
   name: 'default',
   title: 'Labora',
 
-  projectId: '3qdm36yh',
+  projectId: '3qdm36yh', // Replace with your actual project ID
   dataset: 'production',
 
-  plugins: [structureTool(), visionTool()],
+  plugins: [
+    structureTool({
+      structure,
+    }),
+  ],
 
   schema: {
     types: schemaTypes,
