@@ -106,7 +106,7 @@ const CountryParticles = ({ radius, countryId }: Props) => {
 
       // Scale number of points based on actual country area
       const basePoints = 100
-      const maxPoints = 15000
+      const maxPoints = 20000
       // More aggressive scaling for small countries
       const areaScale = Math.pow(Math.min(1, Math.max(0.00001, area * 8)), 0.8)
       const numPoints = Math.floor(
