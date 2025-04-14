@@ -1,4 +1,5 @@
 import {defineConfig} from 'sanity'
+import {vercelDeployTool} from 'sanity-plugin-vercel-deploy'
 
 import {structureTool} from 'sanity/structure'
 import {schemaTypes} from './schemaTypes'
@@ -15,6 +16,7 @@ export default defineConfig({
     structureTool({
       structure,
     }),
+    vercelDeployTool(),
   ],
 
   schema: {
