@@ -1,32 +1,35 @@
 ---
 import '@fontsource-variable/dm-sans'
+import { client, query } from '../lib/sanity'
 import Nav from '../components/nav.astro'
 import About from '../components/about.astro'
 import Footer from '../components/footer.astro'
 import Companies from '../components/companies.astro'
 import Investments from '../components/investments.astro'
 import Impact from '../components/impact.astro'
+
+const homeData = await client.fetch(query)
 ---
 
-<html lang='en'>
+<html lang="en">
   <head>
-    <meta charset='utf-8' />
-    <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
-    <meta name='viewport' content='width=device-width' />
-    <meta name='generator' content={Astro.generator} />
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
     <meta
-      name='description'
+      name="description"
       content="Labora oversees the Mackie Family's business interests, deploying capital into businesses that create long-term value through empowerment, autonomy, and stability."
     />
     <title>Labora</title>
   </head>
-  <body class='bg-grey-dark text-white'>
+  <body class="bg-grey-dark text-white">
     <Nav />
     <main>
-      <About />
-      <Companies />
-      <Investments />
-      <Impact />
+      <About hero={homeData.hero} />
+      <Companies companies={homeData.companies} />
+      <Investments vision={homeData.vision} />
+      <Impact impact={homeData.impact} />
     </main>
     <Footer />
   </body>
