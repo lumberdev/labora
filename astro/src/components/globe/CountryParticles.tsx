@@ -30,26 +30,26 @@ const CountryParticles = ({ radius, countryId }: Props) => {
         uniform float areaScale;
         attribute float random;
         varying float vAlpha;
-        
+
         void main() {
           vec3 pos = position;
-          
+
           // Create a wave pattern that moves across the country
           float wave = sin(pos.x * 2.0 + pos.z * 2.0 + time * 1.5) * 0.5 + 0.5;
-          
+
           // Add some noise based on position for variety
           float noise = sin(random * 6.28 + time) * 0.5 + 0.5;
-          
+
           // Combine effects with reduced amplitude
           float totalEffect = wave * 0.015 + noise * 0.01;
-          
+
           // Apply displacement
           pos = pos * (1.0 + totalEffect);
-          
+
           // Calculate alpha based on height and area scale
-          float baseAlpha = 0.8; 
-          vAlpha = (baseAlpha + totalEffect * 1.5) * (0.7 + areaScale * 0.3);  
-          
+          float baseAlpha = 0.8;
+          vAlpha = (baseAlpha + totalEffect * 1.5) * (0.7 + areaScale * 0.3);
+
           vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
           gl_PointSize = 2.5;
           gl_Position = projectionMatrix * mvPosition;
@@ -58,17 +58,19 @@ const CountryParticles = ({ radius, countryId }: Props) => {
       fragmentShader: `
         uniform vec3 color;
         varying float vAlpha;
-        
+
         void main() {
           vec2 center = gl_PointCoord - vec2(0.5);
-          float dist = length(center);
-          
-          // Create softer particles with a glow effect
-          float alpha = smoothstep(0.5, 0.2, dist) * min(1.0, vAlpha);
-          
-          // Add subtle glow
+          // Calculate squared distance to avoid sqrt in length()
+          float distSq = dot(center, center);
+
+          // Adjust thresholds (0.15, 0.04) to find balance. (Previous was 0.1, 0.04 -> grainy; 0.25, 0.04 -> soft)
+          float alpha = smoothstep(0.15, 0.04, distSq) * min(1.0, vAlpha);
+
+          // Add subtle glow - calculate sqrt once if needed for visual effect
+          float dist = sqrt(distSq);
           vec3 finalColor = color + color * (1.0 - dist) * 0.5;
-          
+
           gl_FragColor = vec4(finalColor, alpha);
         }
       `,
@@ -104,7 +106,7 @@ const CountryParticles = ({ radius, countryId }: Props) => {
 
       // Scale number of points based on actual country area
       const basePoints = 100
-      const maxPoints = 30000
+      const maxPoints = 20000
       // More aggressive scaling for small countries
       const areaScale = Math.pow(Math.min(1, Math.max(0.00001, area * 8)), 0.8)
       const numPoints = Math.floor(
@@ -112,22 +114,30 @@ const CountryParticles = ({ radius, countryId }: Props) => {
       )
 
       // Store bounds and area for each sub-polygon if it's a MultiPolygon
-      let subPolygonsInfo: { bounds: ReturnType<typeof getBounds>; area: number }[] = [];
-      let totalSubPolygonArea = 0;
+      let subPolygonsInfo: {
+        bounds: ReturnType<typeof getBounds>
+        area: number
+      }[] = []
+      let totalSubPolygonArea = 0
 
       if (countryFeature.geometry.type === 'MultiPolygon') {
-        subPolygonsInfo = countryFeature.geometry.coordinates.map(polygonRings => {
-          const featurePart = {
-            type: 'Feature',
-            properties: {},
-            id: countryId || undefined,
-            geometry: { type: 'Polygon', coordinates: polygonRings }
-          } as CountryFeature;
-          const bounds = getBounds(featurePart);
-          const area = calculateApproximateArea(bounds, featurePart); // Calculate area for this sub-polygon
-          return { bounds, area };
-        });
-        totalSubPolygonArea = subPolygonsInfo.reduce((sum, info) => sum + info.area, 0);
+        subPolygonsInfo = countryFeature.geometry.coordinates.map(
+          (polygonRings) => {
+            const featurePart = {
+              type: 'Feature',
+              properties: {},
+              id: countryId || undefined,
+              geometry: { type: 'Polygon', coordinates: polygonRings },
+            } as CountryFeature
+            const bounds = getBounds(featurePart)
+            const area = calculateApproximateArea(bounds, featurePart) // Calculate area for this sub-polygon
+            return { bounds, area }
+          },
+        )
+        totalSubPolygonArea = subPolygonsInfo.reduce(
+          (sum, info) => sum + info.area,
+          0,
+        )
       }
 
       const positions: number[] = []
@@ -136,31 +146,34 @@ const CountryParticles = ({ radius, countryId }: Props) => {
       const maxAttempts = numPoints * 20 // Keep reduced max attempts
 
       while (positions.length < numPoints * 3 && attempts < maxAttempts) {
-        let lat: number;
-        let lon: number;
+        let lat: number
+        let lon: number
 
-        if (countryFeature.geometry.type === 'MultiPolygon' && subPolygonsInfo.length > 0 && totalSubPolygonArea > 0) {
+        if (
+          countryFeature.geometry.type === 'MultiPolygon' &&
+          subPolygonsInfo.length > 0 &&
+          totalSubPolygonArea > 0
+        ) {
           // Weighted random selection of sub-polygon based on area
-          let randomArea = Math.random() * totalSubPolygonArea;
-          let selectedIndex = -1;
+          let randomArea = Math.random() * totalSubPolygonArea
+          let selectedIndex = -1
           for (let i = 0; i < subPolygonsInfo.length; i++) {
-            randomArea -= subPolygonsInfo[i].area;
+            randomArea -= subPolygonsInfo[i].area
             if (randomArea <= 0) {
-              selectedIndex = i;
-              break;
+              selectedIndex = i
+              break
             }
           }
           // Fallback to last polygon if something went wrong with floating point math
-          if (selectedIndex === -1) selectedIndex = subPolygonsInfo.length - 1; 
+          if (selectedIndex === -1) selectedIndex = subPolygonsInfo.length - 1
 
-          const selectedBounds = subPolygonsInfo[selectedIndex].bounds;
-          lat = randomBetween(selectedBounds.minLat, selectedBounds.maxLat);
-          lon = randomBetween(selectedBounds.minLon, selectedBounds.maxLon);
-
+          const selectedBounds = subPolygonsInfo[selectedIndex].bounds
+          lat = randomBetween(selectedBounds.minLat, selectedBounds.maxLat)
+          lon = randomBetween(selectedBounds.minLon, selectedBounds.maxLon)
         } else {
           // For simple Polygons, sample within the main bounds
-          lat = randomBetween(bounds.minLat, bounds.maxLat);
-          lon = randomBetween(bounds.minLon, bounds.maxLon);
+          lat = randomBetween(bounds.minLat, bounds.maxLat)
+          lon = randomBetween(bounds.minLon, bounds.maxLon)
         }
 
         // isPointInPolygon check still required as bounds are rectangular
