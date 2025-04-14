@@ -4,132 +4,140 @@ import clouds from '../assets/clouds.png'
 import cityscapeDesktop from '../assets/cityscape-full-desktop.png'
 import cityscapeMobile from '../assets/cityscape-full-mobile.png'
 import HorizontalAnimation from './HorizontalAnimation'
+import { PortableText } from 'astro-portabletext'
+import { components } from './portableText/Components.astro'
+import type { PortableTextBlock } from '@portabletext/types'
+
+interface Props {
+  hero: {
+    heading: string
+    copy1: PortableTextBlock[]
+    copy2: PortableTextBlock[]
+  }
+}
+
+const { hero } = Astro.props
 ---
 
-<section id='about' class='gap-25 mb-25 grid'>
+<section id="about" class="gap-25 mb-25 grid">
   <div
-    class='mx-auto mb-4 flex w-full max-w-[1440px] flex-col gap-3 px-5 md:px-12.5 xl:flex-row xl:gap-8'
+    class="mx-auto mb-4 flex w-full max-w-[1440px] flex-col gap-3 px-5 md:px-12.5 xl:flex-row xl:gap-8"
   >
-    <div class='max-w-[850px]'>
+    <div class="max-w-[850px]">
       <h1
-        class='text-[32px] font-bold uppercase leading-none tracking-wide sm:text-4xl md:text-7xl'
+        class="text-[32px] font-bold uppercase leading-none tracking-wide sm:text-4xl md:text-7xl"
       >
-        Long Term Success Through Empowerment
+        {hero.heading}
       </h1>
     </div>
-    <div class='max-w-[550px] lg:self-end'>
-      <p class='text-sm !leading-normal md:text-lg lg:text-2xl'>
-        By finding partners aligned with our values and empowering them with
-        autonomy, stability, and long-term capital, we believe we can achieve
-        lasting success — and have fun along the way.
-      </p>
+    <div class="max-w-[550px] lg:self-end">
+      <div class="text-sm !leading-normal md:text-lg lg:text-2xl">
+        <PortableText value={hero.copy1} components={components} />
+      </div>
     </div>
   </div>
   <div>
-    <div class='relative h-[300px] overflow-hidden md:h-[450px]'>
-      <div class='absolute top-0 hidden h-[200px] md:block'>
+    <div class="relative h-[300px] overflow-hidden md:h-[450px]">
+      <div class="absolute top-0 hidden h-[200px] md:block">
         <HorizontalAnimation to={0} from={-50} client:load>
           <Image
             src={clouds}
-            alt='Clouds'
+            alt="Clouds"
             width={2128}
-            format='webp'
-            loading='eager'
+            format="webp"
+            loading="eager"
             quality={75}
           />
           <Image
             src={clouds}
-            alt='Clouds'
+            alt="Clouds"
             width={2128}
-            format='webp'
-            loading='eager'
+            format="webp"
+            loading="eager"
             quality={75}
           />
           <Image
             src={clouds}
-            alt='Clouds'
+            alt="Clouds"
             width={2128}
-            class='hidden xl:block'
-            loading='eager'
+            class="hidden xl:block"
+            loading="eager"
             quality={75}
           />
         </HorizontalAnimation>
       </div>
-      <div class='absolute bottom-0 hidden h-[450px] md:block'>
+      <div class="absolute bottom-0 hidden h-[450px] md:block">
         <HorizontalAnimation to={-50} from={0} client:load>
           <Image
             src={cityscapeDesktop}
-            alt='Cityscape'
+            alt="Cityscape"
             width={3439}
-            format='webp'
-            loading='eager'
+            format="webp"
+            loading="eager"
             quality={75}
           />
           <Image
             src={cityscapeDesktop}
-            alt='Cityscape'
+            alt="Cityscape"
             width={3439}
-            format='webp'
-            loading='eager'
+            format="webp"
+            loading="eager"
             quality={75}
           />
           <Image
             src={cityscapeDesktop}
-            alt='Cityscape'
+            alt="Cityscape"
             width={3439}
-            class='hidden xl:block'
-            format='webp'
-            loading='eager'
+            class="hidden xl:block"
+            format="webp"
+            loading="eager"
             quality={75}
           />
         </HorizontalAnimation>
       </div>
-      <div class='absolute top-0 block h-[100px] md:hidden'>
+      <div class="absolute top-0 block h-[100px] md:hidden">
         <HorizontalAnimation to={0} from={-50} client:load>
           <Image
             src={clouds}
-            alt='Clouds'
+            alt="Clouds"
             width={1064}
-            format='webp'
-            loading='eager'
+            format="webp"
+            loading="eager"
           />
           <Image
             src={clouds}
-            alt='Clouds'
+            alt="Clouds"
             width={1064}
-            format='webp'
-            loading='eager'
+            format="webp"
+            loading="eager"
           />
         </HorizontalAnimation>
       </div>
-      <div class='absolute bottom-0 block h-[300px] md:hidden'>
+      <div class="absolute bottom-0 block h-[300px] md:hidden">
         <HorizontalAnimation to={-50} from={0} client:load>
           <Image
             src={cityscapeMobile}
-            alt='Cityscape'
+            alt="Cityscape"
             width={2292}
-            format='webp'
-            loading='eager'
+            format="webp"
+            loading="eager"
           />
           <Image
             src={cityscapeMobile}
-            alt='Cityscape'
+            alt="Cityscape"
             width={2292}
-            format='webp'
-            loading='eager'
+            format="webp"
+            loading="eager"
           />
         </HorizontalAnimation>
       </div>
     </div>
   </div>
   <div
-    class='max-w-[900px] space-y-10 justify-self-center px-10 pb-10 pt-20 text-center text-xl font-normal leading-normal text-tan md:text-3xl'
+    class="max-w-[900px] space-y-10 justify-self-center px-10 pb-10 pt-20 text-center text-xl font-normal leading-normal text-tan md:text-3xl"
   >
-    <p>
-      Labora manages the Mackie Family's business and philanthropic investments,
-      focusing on opportunities that create enduring value. We take a
-      thoughtful, sustainable approach, because when we invest, we believe in
-      going all in—and lifelong.
-    </p>
+    <div>
+      <PortableText value={hero.copy2} components={components} />
+    </div>
   </div>
 </section>

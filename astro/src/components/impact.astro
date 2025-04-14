@@ -1,40 +1,40 @@
+---
+import { PortableText } from 'astro-portabletext'
+import { components } from './portableText/Components.astro'
+import type { PortableTextBlock } from '@portabletext/types'
+
+interface Props {
+  impact: {
+    heading: string
+    subHeading: PortableTextBlock[]
+    copy: PortableTextBlock[]
+  }
+}
+
+const { impact } = Astro.props
+---
+
 <section
-  id='impact'
-  class='mx-auto w-full max-w-[1440px] px-10 py-20 md:px-25 md:py-25'
+  id="impact"
+  class="mx-auto w-full max-w-[1440px] px-10 py-20 md:px-25 md:py-25"
 >
-  <div class='grid grid-rows-2 gap-[30px] lg:grid-cols-2 lg:grid-rows-1'>
+  <div class="grid grid-rows-2 gap-[30px] lg:grid-cols-2 lg:grid-rows-1">
     <div
-      class='flex flex-col justify-between gap-5 rounded-3xl bg-white px-[30px] py-[25px] md:p-12.5'
+      class="flex flex-col justify-between gap-5 rounded-3xl bg-white px-[30px] py-[25px] md:p-12.5"
     >
       <h2
-        class='mb-10 text-right text-4xl uppercase tracking-wide text-tan lg:text-6xl'
+        class="mb-10 text-right text-4xl uppercase tracking-wide text-tan lg:text-6xl"
       >
-        Impact
+        {impact.heading}
       </h2>
-      <div class='space-y-5 text-xl text-black lg:text-3xl'>
-        <p>The Hartland & Mackie <br /> Family Foundation</p>
-        <p>Janet Nash <br /> Charitable Foundation</p>
+      <div class="space-y-5 text-xl text-black lg:text-3xl">
+        <PortableText value={impact.subHeading} components={components} />
       </div>
     </div>
     <div
-      class='text-normal rounded-3xl bg-tan-light px-[30px] py-[25px] leading-normal text-black md:p-12.5 lg:text-2xl'
+      class="text-normal rounded-3xl bg-tan-light px-[30px] py-[25px] leading-normal text-black md:p-12.5 lg:text-2xl"
     >
-      <p>
-        Tom Mackie, our founder, taught his kids grandkids and great grandkids a
-        simple approach to finances…
-        <blockquote class='py-1 font-medium italic text-grey-dark'>
-          <q>Save a little, spend a little, and give a little away.</q>
-        </blockquote>
-      </p>
-      <p>
-        A Mackie Family motto carried through generations introduced a simple
-        approach to finances: “Save a little, spend a little, give a little
-        away.” Through our family foundations, we're all about giving what we
-        can to help people reach their full potential and thrive. We focus on
-        poverty alleviation, children's health, mental health, and building
-        strong communities. We also support the visual arts, making creativity
-        and shared knowledge more accessible to everyone.
-      </p>
+      <PortableText value={impact.copy} components={components} />
     </div>
   </div>
 </section>

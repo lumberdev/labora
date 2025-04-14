@@ -1,16 +1,29 @@
-<section id='investments' class='mx-auto max-w-[1440px] 2xl:px-25'>
+---
+import { PortableText } from 'astro-portabletext'
+import { components } from './portableText/Components.astro'
+import type { PortableTextBlock } from '@portabletext/types'
+
+interface Props {
+  vision: {
+    heading: string
+    copy: PortableTextBlock
+  }
+}
+
+const { vision } = Astro.props
+---
+
+<section id="investments" class="mx-auto max-w-[1440px] 2xl:px-25">
   <div
-    class='lg:gap-y-12.5 grid w-full gap-y-5 bg-tan px-10 py-20 md:px-25 md:py-25 lg:grid-cols-2 lg:grid-rows-[auto_1fr] 2xl:rounded-[30px] 2xl:px-12.5'
+    class="lg:gap-y-12.5 grid w-full gap-y-5 bg-tan px-10 py-20 md:px-25 md:py-25 lg:grid-cols-2 lg:grid-rows-[auto_1fr] 2xl:rounded-[30px] 2xl:px-12.5"
   >
-    <h2 class='text-4xl uppercase tracking-wide md:text-6xl'>Investments</h2>
-    <p
-      class='max-w-72 text-xl leading-normal text-black md:max-w-full md:text-3xl lg:col-start-2 lg:row-start-2 lg:max-w-[600px] lg:place-self-center'
+    <h2 class="text-4xl uppercase tracking-wide md:text-6xl">
+      {vision.heading}
+    </h2>
+    <div
+      class="max-w-72 text-xl leading-normal text-black md:max-w-full md:text-3xl lg:col-start-2 lg:row-start-2 lg:max-w-[600px] lg:place-self-center"
     >
-      Labora Capital Partners aims to build a legacy that reflects our lifelong
-      commitment to learn from, invest in, and partner with those who share our
-      passion for growth and our guiding life principles. Our permanent capital
-      base allows us to patiently and prudently invest across asset classes
-      globally.
-    </p>
+      <PortableText value={vision.copy} components={components} />
+    </div>
   </div>
 </section>
