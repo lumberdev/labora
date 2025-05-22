@@ -4,7 +4,7 @@ import react from '@astrojs/react'
 import tailwind from '@astrojs/tailwind'
 import svgr from 'vite-plugin-svgr'
 
-import vercel from '@astrojs/vercel';
+import vercel from '@astrojs/vercel'
 
 // https://astro.build/config
 export default defineConfig({
@@ -28,6 +28,10 @@ export default defineConfig({
         },
       }),
     ],
+    server: {
+      host: true,
+      allowedHosts: ['localhost', 'labora.theolev.com'],
+    },
   },
 
   adapter: vercel(),
