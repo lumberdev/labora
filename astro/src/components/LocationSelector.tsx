@@ -3,18 +3,10 @@ import { Globe } from './globe/Globe'
 import { locations, type Company, type CountryKey } from '@/lib/data'
 import { cn } from '@/lib/utils'
 import GlobeMagnifier from '@/assets/icons/globe-magnifier.svg?react'
-import { useTransition, animated } from '@react-spring/web'
 
 const LocationSelector = () => {
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null)
   const [showCountries, setShowCountries] = useState(false)
-
-  const countryTransition = useTransition(showCountries, {
-    from: { opacity: 0, transform: 'translateY(-4px)' },
-    enter: { opacity: 1, transform: 'translateY(0px)' },
-    leave: { opacity: 0, transform: 'translateY(-4px)' },
-    config: { tension: 300, friction: 20 },
-  })
 
   // Get all unique countries across all companies
   const allCountries = locations
@@ -77,7 +69,8 @@ const LocationSelector = () => {
                           className="max-w-full"
                         />
                       </button>
-                      <div
+                      <button
+                        onClick={() => handleCompanySelect(company)}
                         className={cn(
                           'flex flex-col',
                           !selectedCompany || selectedCompany !== company
@@ -85,59 +78,48 @@ const LocationSelector = () => {
                             : '',
                         )}
                       >
-                        <button
-                          onClick={() => handleCompanySelect(company)}
-                          className="text-left text-sm uppercase"
-                        >
+                        <span className="text-left text-sm uppercase">
                           {company.name}
-                        </button>
-                        {company === selectedCompany && (
-                          <div className="grid gap-1 text-left">
-                            <div className="relative">
-                              <span
-                                className="cursor-pointer text-xs"
-                                onMouseEnter={() => setShowCountries(true)}
-                                onMouseLeave={() => setShowCountries(false)}
-                                onClick={() => {
-                                  setShowCountries(!showCountries)
-                                }}
+                        </span>
+                        <div className="grid gap-1 text-left">
+                          {company === selectedCompany ? (
+                            <>
+                              <div className="mt-1 bg-grey-dark text-xs">
+                                {company.countries.map(
+                                  (country, index, self) => (
+                                    <span key={country.name}>
+                                      {country.name}
+                                      {index !== self.length - 1 ? ' • ' : ''}
+                                    </span>
+                                  ),
+                                )}
+                              </div>
+                              <a
+                                className="w-fit text-xs underline"
+                                href={company.website}
+                                target="_blank"
+                                rel="noopener noreferrer"
                               >
-                                Active in {company.countries.length}{' '}
-                                {company.countries.length === 1
-                                  ? 'country'
-                                  : 'countries'}
-                              </span>
-                              {countryTransition((style, item) =>
-                                item ? (
-                                  <animated.div
-                                    style={style}
-                                    className="absolute left-0 top-full z-10 mt-1 rounded bg-grey-dark p-2 text-xs shadow-lg"
-                                  >
-                                    {company.countries.map(
-                                      (country, index, self) => (
-                                        <span key={country.name}>
-                                          {country.name}
-                                          {index !== self.length - 1
-                                            ? ' • '
-                                            : ''}
-                                        </span>
-                                      ),
-                                    )}
-                                  </animated.div>
-                                ) : null,
-                              )}
-                            </div>
-                            <a
-                              className="w-fit text-xs underline"
-                              href={company.website}
-                              target="_blank"
-                              rel="noopener noreferrer"
+                                Website
+                              </a>
+                            </>
+                          ) : (
+                            <span
+                              className="cursor-pointer text-xs"
+                              onMouseEnter={() => setShowCountries(true)}
+                              onMouseLeave={() => setShowCountries(false)}
+                              onClick={() => {
+                                setShowCountries(!showCountries)
+                              }}
                             >
-                              Website
-                            </a>
-                          </div>
-                        )}
-                      </div>
+                              Active in {company.countries.length}{' '}
+                              {company.countries.length === 1
+                                ? 'country'
+                                : 'countries'}
+                            </span>
+                          )}
+                        </div>
+                      </button>
                     </div>
                   ))}
                 </div>
