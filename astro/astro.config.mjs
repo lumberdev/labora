@@ -30,7 +30,7 @@ export default defineConfig({
     ],
     server: {
       host: true,
-      allowedHosts: ['localhost', 'labora.theolev.com'],
+      allowedHosts: ['localhost'],
     },
   },
 
