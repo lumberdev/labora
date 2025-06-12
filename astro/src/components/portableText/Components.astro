@@ -1,9 +1,13 @@
 ---
 import Block from './Block.astro'
+import Link from './Link.astro'
 
 // Export the components configuration to be used with PortableText
 export const components = {
   // Use our custom Block component to handle different block styles
   block: Block,
+  mark: {
+    link: Link,
+  },
 }
 ---

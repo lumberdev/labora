@@ -1,0 +1,18 @@
+---
+const { node } = Astro.props 
+const { href } = node?.markDef || {}
+
+const isExternal = href?.startsWith('http://') || href?.startsWith('https://')
+
+const linkProps = {
+  href,
+  ...(isExternal ? {
+    target: '_blank',
+    rel: 'noopener noreferrer'
+  } : {})
+}
+---
+
+<a {...linkProps} class="underline underline-offset-2 hover:text-black/80 transition-all">
+  <slot/>
+</a>
