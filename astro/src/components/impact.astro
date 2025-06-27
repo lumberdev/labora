@@ -1,7 +1,10 @@
 ---
+import { Image } from 'astro:assets'
 import { PortableText } from 'astro-portabletext'
 import { components } from './portableText/Components.astro'
 import type { PortableTextBlock } from '@portabletext/types'
+import CESCares from '../assets/CES-Cares-logo.png'
+import CEFCares from '../assets/CEF-Cares-logo.png'
 
 interface Props {
   impact: {
@@ -29,6 +32,60 @@ const { impact } = Astro.props
       </h2>
       <div class="space-y-5 text-xl text-black lg:text-3xl">
         <PortableText value={impact.subHeading} components={components} />
+        <div class="flex gap-11 pt-5 md:gap-16 md:pt-12">
+          <a
+            href="https://www.cef.co.uk/cef-cares"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Image
+              src={CEFCares}
+              alt="CEF Cares logo"
+              width={98}
+              height={80}
+              format="webp"
+              loading="lazy"
+              quality={75}
+              class="hidden md:block"
+            />
+            <Image
+              src={CEFCares}
+              alt="CEF Cares logo"
+              width={66}
+              height={54}
+              format="webp"
+              loading="lazy"
+              quality={75}
+              class="md:hidden"
+            />
+          </a>
+          <a
+            href="https://www.cityelectricsupply.com/CESCares?srsltid=AfmBOoobmzBwZZ3iiOEPGtuF9iu_skGiBEe4zQ8868Zx2FogpAxLkLhT"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Image
+              src={CESCares}
+              alt="CES Cares logo"
+              width={107}
+              height={80}
+              format="webp"
+              loading="lazy"
+              quality={75}
+              class="hidden md:block"
+            />
+            <Image
+              src={CESCares}
+              alt="CES Cares logo"
+              width={73}
+              height={54}
+              format="webp"
+              loading="lazy"
+              quality={75}
+              class="md:hidden"
+            />
+          </a>
+        </div>
       </div>
     </div>
     <div
