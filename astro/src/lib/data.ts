@@ -33,7 +33,6 @@ export const locations: LocationGroup[] = [
           { name: 'United States', id: '840' },
           { name: 'Canada', id: '124' },
           { name: 'China', id: '156' },
-          { name: 'Puerto Rico', id: '630' },
         ],
       },
       {
