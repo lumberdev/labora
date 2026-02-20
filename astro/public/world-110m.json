@@ -444,14 +444,6 @@
         },
         {
           "type": "Polygon",
-          "arcs": [[247]],
-          "id": "630",
-          "properties": {
-            "name": "Puerto Rico"
-          }
-        },
-        {
-          "type": "Polygon",
           "arcs": [[248]],
           "id": "388",
           "properties": {

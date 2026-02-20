@@ -33,7 +33,6 @@ export const locations: LocationGroup[] = [
           { name: 'United States', id: '840' },
           { name: 'Canada', id: '124' },
           { name: 'China', id: '156' },
-          { name: 'Puerto Rico', id: '630' },
         ],
       },
       {
@@ -134,7 +133,6 @@ export const coordinates = {
   Ireland: { lat: 53.3498, lon: -8.2437 },
   Spain: { lat: 40.4637, lon: -3.7492 },
   China: { lat: 35.8617, lon: 104.1954 },
-  'Puerto Rico': { lat: 18.2208, lon: -66.5901 },
   Netherlands: { lat: 52.1326, lon: 5.2913 },
   Turkey: { lat: 38.9637, lon: 35.2433 },
   Namibia: { lat: -22.9576, lon: 18.4904 },
